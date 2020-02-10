@@ -1,4 +1,4 @@
-## Расчет на продавливание по СП63.13330.2012 by TermenVox.(https://shearslabcalc.appspot.com/)
+## Расчет на продавливание по СП63.13330.2012 by TermenVox. https://shearslabcalc.appspot.com/
 
 Программа создана для быстрого и удобного расчета перекрытий на продавливание.
 

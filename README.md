@@ -4,9 +4,6 @@
 
 Код написан на JavaScript с применением ReactJS и Bootstrap.
 
-
-Дальше идет readme из ReactJS
-
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts

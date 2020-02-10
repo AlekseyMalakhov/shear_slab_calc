@@ -7547,8 +7547,8 @@ function Help(props) {
                     большинство проектировщиков понятия не имеют куда там у них действует момент, все моменты всегда нагружают сечение. 
                     Взяли из схемы максимальные Мх, Му, разделили пополам, вбили их с любыми знаками и забыли.</p>
                 <p>2) Никаких "разгружающих" продольных усилий, по вышеназванным причинам. Продольное усилие всегда нагружает сечение независимо от знака. </p>
-                <p>Для любителей покапаться в коде вот <a href="https://github.com/gdfdfgd/shear_slab_calc">ссылка на GitHub</a> - милости просим.</p>
-                <p>Обсуждение программы на dwg.ru <a href="https://github.com/gdfdfgd/shear_slab_calc">здесь.</a></p>
+                <p>Для любителей покапаться в коде вот <a href="https://github.com/AlekseyMalakhov/shear_slab_calc">ссылка на GitHub</a> - милости просим.</p>
+                <p>Обсуждение программы на dwg.ru <a href="https://github.com/AlekseyMalakhov/shear_slab_calc">здесь.</a></p>
                 <p>Приятного пользования! TermenVox. 2020г. <a href="mailto:hexel@tut.by">hexel@tut.by</a></p>
                 
             </div>

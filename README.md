@@ -1,3 +1,10 @@
+Расчет на продавливание по СП63.13330.2012 by TermenVox.
+Программа создана для быстрого и удобного расчета перекрытий на продавливание.
+Код написан на JavaScript с применением ReactJS и Bootstrap.
+
+
+Дальше идет readme из ReactJS
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts

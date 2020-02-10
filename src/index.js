@@ -7523,7 +7523,7 @@ function Header(props) {
     return (
         <Row className = "top_header mb-3 py-2 h5">
             <div className="col-9 text-left my-auto">
-                <span>Расчет на продавливание по СП 63.13330.2012 by TermenVox. 2020.</span>
+                <span>Расчет на продавливание онлайн по СП 63.13330.2012 by TermenVox. 2020.</span>
             </div>
             <div className="col text-right my-auto"> 
                 <span>v.0.1b</span>

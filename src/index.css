@@ -1,0 +1,105 @@
+.sketch {
+    width: 300px;
+    height: 150px;
+    background-color: coral;
+    
+}
+
+input[type="radio"] {
+    margin-left: 10px;
+}
+
+input[type="checkbox"] {
+    margin-right: 10px;
+}
+
+label {
+    margin-right: 10px;
+}
+
+.circles_bars {
+    display: block;
+}
+
+.result_alert {
+    font-weight: bold;
+}
+
+.result_block {
+    padding-right: 20px;
+}
+
+.right_column {
+    right:-30px;
+}
+
+.my-sidebar {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+i {
+    padding: 0px;
+}
+
+.zoom {
+    font-size: 2rem;
+    text-align: center;
+    height: 45px;
+    width: 45px;
+}
+
+.zoom:hover {
+    font-size: 2.2rem;
+}
+
+.zoom_panel_1 {
+    position: absolute;
+    width: 50px;
+    height: 150px;
+}
+
+#zoom_plus {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+}
+
+#zoom_minus {
+    position: absolute;
+    top: 50px;
+    left: 0px;
+    right: 0px;
+}
+
+#zoom_initial {
+    position: absolute;
+    top: 100px;
+    left: 0px;
+    right: 0px;
+}
+
+.zoom.fa-times {
+    padding-left: 11px;
+}
+
+.top_header {
+    background-color: #adb5bd;
+}
+
+#help {
+    font-size: 1.5rem;
+    color: black;
+}
+
+#help:hover {
+    color: grey;
+}
+
+.like_row {
+    display: flex;
+    flex-wrap: wrap;
+    margin-right: -15px;
+    margin-left: -15px;
+}

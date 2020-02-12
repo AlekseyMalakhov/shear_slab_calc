@@ -2031,14 +2031,30 @@ class App extends React.Component {                 // это наш главн�
             var m_factor_1;
             var mx_1;
             var my_1;
-            if (st.slab_edge_type === "") {                        //если u просто прямоугольник, т.е. нет рядом краев плит
+            if ((st.slab_edge_type === "") && !st.openingIsNear) {                        //если u просто прямоугольник, т.е. нет рядом краев плит и отверстий
                 m_factor_1 = ((st.mx_load*1000)/(mbx_ult + mswx_ult)) + ((st.my_load*1000)/(mby_ult + mswy_ult));                    //считаем коэф. запаса по моментам. Переводим моменты кНм в кН*мм
             }
 
-            if (st.slab_edge_type !== "") {                        //если ,близко край плиты - докидываем моменты от расцентровки
+            if ((st.slab_edge_type === "") && st.openingIsNear) {                        //если u просто прямоугольник и есть отверстия - докидываем моменты от расцентровки
+                mx_1 = Math.abs(st.mx_load*1000) + Math.abs(st.n_load*geom_chars.cut_xc);
+                mx_1 = Number(mx_1.toFixed(2));
+                my_1 = Math.abs(st.my_load*1000) + Math.abs(st.n_load*geom_chars.cut_yc);
+                my_1 = Number(my_1.toFixed(2));
+                m_factor_1 = (mx_1/(mbx_ult + mswx_ult)) + (my_1/(mby_ult + mswy_ult));                    //считаем коэф. запаса по моментам. Переводим моменты кНм в кН*мм
+            }
+
+            if ((st.slab_edge_type !== "") && !st.openingIsNear) {                        //если ,близко край плиты и нет отверстия - докидываем моменты от расцентровки
                 mx_1 = Math.abs(st.mx_load*1000) + Math.abs(st.n_load*geom_chars.xc);
                 mx_1 = Number(mx_1.toFixed(2));
                 my_1 = Math.abs(st.my_load*1000) + Math.abs(st.n_load*geom_chars.yc);
+                my_1 = Number(my_1.toFixed(2));
+                m_factor_1 = (mx_1/(mbx_ult + mswx_ult)) + (my_1/(mby_ult + mswy_ult));                    //считаем коэф. запаса по моментам. Переводим моменты кНм в кН*мм
+            }
+
+            if ((st.slab_edge_type !== "") && st.openingIsNear) {                        //если ,близко край плиты и есть отверстия - докидываем моменты от обоих расцентровак
+                mx_1 = Math.abs(st.mx_load*1000) + Math.abs(st.n_load*geom_chars.xc) + Math.abs(st.n_load*geom_chars.cut_xc);
+                mx_1 = Number(mx_1.toFixed(2));
+                my_1 = Math.abs(st.my_load*1000) + Math.abs(st.n_load*geom_chars.yc) + Math.abs(st.n_load*geom_chars.cut_yc);
                 my_1 = Number(my_1.toFixed(2));
                 m_factor_1 = (mx_1/(mbx_ult + mswx_ult)) + (my_1/(mby_ult + mswy_ult));                    //считаем коэф. запаса по моментам. Переводим моменты кНм в кН*мм
             }
@@ -2973,81 +2989,6 @@ class App extends React.Component {                 // это наш главн�
             }
             return result;
         }
-
-        /*
-
-        new Paragraph({            //
-            children: [
-                new TextRun({
-                    text: " ",
-                }),
-            ],
-            style: "Norm1"
-        }),
-
-        report_data: {
-                                h0: h0,
-                                rbt: rbt,
-                                u: u,
-                                ab: ab,
-                                wbx: wbx,
-                                wby: wby,
-                                size_u_left: geom_chars.size_u_left,
-                                size_u_top: geom_chars.size_u_top,
-                                size_u_right: geom_chars.size_u_right,
-                                size_u_bottom: geom_chars.size_u_bottom,
-                                cut_off: geom_chars.cut_off,
-                                ibx: geom_chars.ibx,
-                                iby: geom_chars.iby,
-                                mbx_ult: mbx_ult,
-                                mby_ult: mby_ult,
-                                fb_ult: fb_ult,
-                                fsw_ult_1: shear_reinf.fsw_ult_1,
-                                fsw_ult: fsw_ult,
-                                f_ult: f_ult,
-                                mswx_ult_1: shear_reinf.mswx_ult_1,
-                                mswx_ult: mswx_ult,
-                                mswy_ult_1: shear_reinf.mswy_ult_1,
-                                mswy_ult: mswy_ult,
-                                n_factor: n_factor,
-                                m_factor_1: m_factor_1,
-                                m_factor_2: m_factor_2,
-                                factor: factor,
-                                asw_sw: shear_reinf.asw_sw,
-                                qsw: shear_reinf.qsw,
-                                mx_1: mx_1,
-                                my_1: my_1,
-                                sx: geom_chars.sx,
-                                sy: geom_chars.sy,
-                                xa: geom_chars.xa,
-                                ya: geom_chars.ya,
-                                xc: geom_chars.xc,
-                                yc: geom_chars.yc,
-                                xmax: geom_chars.xmax,
-                                ymax: geom_chars.ymax,
-                                lx: geom_chars.lx,
-                                ly: geom_chars.ly,
-                                xmax_op: geom_chars.xmax_op,
-                                ymax_op: geom_chars.ymax_op,
-                                cut_off_ibx: geom_chars.cut_off_ibx,
-                                cut_off_iby: geom_chars.cut_off_iby,
-                                cut_off_sx: geom_chars.cut_off_sx,
-                                cut_off_sy: geom_chars.cut_off_sy,
-                                cut_xc: geom_chars.cut_xc,
-                                cut_yc: geom_chars.cut_yc,
-                                cut_chars: geom_chars.cut_chars
-
-                                cut_chars:
-                                    cut_u: (2) [137.664, 42.449]
-                                    cut_ibx: (2) [9957964, 4763839]
-                                    cut_iby: (2) [4711550, 1134201]
-                                    cut_sx: (2) [36618, 14220]
-                                    cut_sy: (2) [25467, 6919]
-                                    cut_midX: (2) [266, 335]
-                                    cut_midY: (2) [185, 163]
-                                    dir: (2) ["horiz", "vert"]
-
-        */
 
         const report_5 = function() {
             var result = [];
@@ -6486,7 +6427,7 @@ class App extends React.Component {                 // это наш главн�
                 myult_letter = mbyult_letter;
             }
             if (st.report_data.m_factor_1 !== 0 || st.report_data.m_factor_2 !== 0) {
-                if (st.slab_edge_type === "") {             //если колонна не на краю плиты
+                if ((st.slab_edge_type === "") && !st.openingIsNear) {             //если колонна не на краю плиты и нет лишних эксценриситетов от отверстия
                     if (st.mx_load && st.my_load) {
                         p1 = new Paragraph({                 //"<p>Выражение Mx/M<sub>x,ult</sub> + My/M<sub>y,ult</sub> = " + st.mx_load*1000 + " кН*мм / " + mx_ult + " + " + st.my_load*1000 + " кН*мм / " + my_ult + " = " + st.report_data.m_factor_1 + ",</p>" +
                             children: [
@@ -6579,7 +6520,101 @@ class App extends React.Component {                 // это наш главн�
                     });
                     result = [p1, p2];
                 }
-                if (st.slab_edge_type !== "") {             //если край плиты рядом
+                if ((st.slab_edge_type === "") && st.openingIsNear) {             //если u просто прямоугольник и есть отверстия - докидываем моменты от расцентровки
+                    p1 = new Paragraph({                       //"Учет эксцентриситета приложения продавливающего усилия:",
+                            children: [
+                                new TextRun({
+                                    text: "Учет эксцентриситета приложения продавливающего усилия:",
+                                })
+                            ],
+                            style: "Norm1"
+                        });
+                    p2 = new Paragraph({                       //mx_1 = Math.abs(st.mx_load*1000) + Math.abs(st.n_load*geom_chars.cut_xc);
+                            children: [
+                                mx_letter,
+                                new TextRun({
+                                    text: " = |",
+                                }),
+                                mx_letter,
+                                new TextRun({
+                                    text: "| + |F * ",
+                                }),
+                                new TextRun({
+                                    text: "x'",
+                                }),
+                                new TextRun({
+                                    text: "c",
+                                    subScript: true
+                                }),
+                                new TextRun({
+                                    text: "| = |" + st.mx_load*1000 + "| кН*мм + |" + st.n_load + "| кН * |" + st.report_data.cut_xc + "| мм = " + st.report_data.mx_1 + " кН*мм,",
+                                }),
+                            ],
+                            style: "Norm1"
+                        });
+                    p3 = new Paragraph({                       //my_1 = Math.abs(st.my_load*1000) + Math.abs(st.n_load*geom_chars.yc);
+                            children: [
+                                my_letter,
+                                new TextRun({
+                                    text: " = |",
+                                }),
+                                my_letter,
+                                new TextRun({
+                                    text: "| + |F * ",
+                                }),
+                                new TextRun({
+                                    text: "y'",
+                                }),
+                                new TextRun({
+                                    text: "c",
+                                    subScript: true
+                                }),
+                                new TextRun({
+                                    text: "| = |" + st.my_load*1000 + "| кН*мм + |" + st.n_load + "| кН * |" + st.report_data.cut_yc + "| мм = " + st.report_data.my_1 + " кН*мм,",
+                                }),
+                            ],
+                            style: "Norm1"
+                        });
+                    p4 = new Paragraph({                 //"<p>Выражение Mx/M<sub>x,ult</sub> + My/M<sub>y,ult</sub> = " + st.mx_load*1000 + " кН*мм / " + mx_ult + " + " + st.my_load*1000 + " кН*мм / " + my_ult + " = " + st.report_data.m_factor_1 + ",</p>" +
+                            children: [
+                                new TextRun({
+                                    text: "Выражение ",
+                                }),
+                                mx_letter,
+                                new TextRun({
+                                    text: "/",
+                                }),
+                                mxult_letter,
+                                new TextRun({
+                                    text: " + ",
+                                }),
+                                my_letter,
+                                new TextRun({
+                                    text: "/",
+                                }),
+                                myult_letter,
+                                new TextRun({
+                                    text: " = " + st.report_data.mx_1 + " кН*мм / " + mx_ult + " + " + st.report_data.my_1 + " кН*мм / " + my_ult + " = " + st.report_data.m_factor_1 + ",",
+                                }),
+                            ],
+                            style: "Norm1"
+                        });
+                    p5 = new Paragraph({                 //Выражение F/(2*F<sub>ult</sub>) = " + st.n_load + " /(2 * " + st.report_data.f_ult  + ") = " + 0.5*st.report_data.n_factor + ",</p>" + 
+                            children: [
+                                new TextRun({
+                                    text: "Выражение F/(2*",
+                                }),
+                                fult_letter,
+                                new TextRun({
+                                    text: ") = " + st.n_load + " / (2 * " + st.report_data.f_ult  + ") = " + n_factor_check + ",",
+                                }),
+                            ],
+                            style: "Norm1"
+                        });
+                    result = [p1, p2, p3, p4, p5];
+                    
+                }
+                if ((st.slab_edge_type !== "") && !st.openingIsNear) {             //если край плиты рядом или нет отверстий)
                     p1 = new Paragraph({                       //"Учет эксцентриситета приложения продавливающего усилия:",
                             children: [
                                 new TextRun({
@@ -6734,6 +6769,108 @@ class App extends React.Component {                 // это наш главн�
                             style: "Norm1"
                         });
                     }
+                    p5 = new Paragraph({                 //Выражение F/(2*F<sub>ult</sub>) = " + st.n_load + " /(2 * " + st.report_data.f_ult  + ") = " + 0.5*st.report_data.n_factor + ",</p>" + 
+                            children: [
+                                new TextRun({
+                                    text: "Выражение F/(2*",
+                                }),
+                                fult_letter,
+                                new TextRun({
+                                    text: ") = " + st.n_load + " / (2 * " + st.report_data.f_ult  + ") = " + n_factor_check + ",",
+                                }),
+                            ],
+                            style: "Norm1"
+                        });
+                    result = [p1, p2, p3, p4, p5];
+                    
+                }
+                if ((st.slab_edge_type !== "") && st.openingIsNear) {             //если край плиты рядом или нет отверстий)
+                    p1 = new Paragraph({                       //"Учет эксцентриситета приложения продавливающего усилия:",
+                            children: [
+                                new TextRun({
+                                    text: "Учет эксцентриситета приложения продавливающего усилия:",
+                                })
+                            ],
+                            style: "Norm1"
+                        });
+                    p2 = new Paragraph({                       //mx_1 = Math.abs(st.mx_load*1000) + Math.abs(st.n_load*geom_chars.xc) + Math.abs(st.n_load*geom_chars.cut_xc);
+                            children: [
+                                mx_letter,
+                                new TextRun({
+                                    text: " = |",
+                                }),
+                                mx_letter,
+                                new TextRun({
+                                    text: "| + |F * ",
+                                }),
+                                xc_letter,
+                                new TextRun({
+                                    text: "| + |F * ",
+                                }),
+                                new TextRun({
+                                    text: "x'",
+                                }),
+                                new TextRun({
+                                    text: "c",
+                                    subScript: true
+                                }),
+                                new TextRun({
+                                    text: "| = |" + st.mx_load*1000 + "| кН*мм + |" + st.n_load + "| кН * |" + st.report_data.xc + "| мм + |" + st.n_load + "| кН * |" + st.report_data.cut_xc + "| мм = " + st.report_data.mx_1 + " кН*мм,",
+                                }),
+                            ],
+                            style: "Norm1"
+                        });
+                    p3 = new Paragraph({                       //my_1 = Math.abs(st.my_load*1000) + Math.abs(st.n_load*geom_chars.yc) + Math.abs(st.n_load*geom_chars.cut_yc);
+                            children: [
+                                my_letter,
+                                new TextRun({
+                                    text: " = |",
+                                }),
+                                my_letter,
+                                new TextRun({
+                                    text: "| + |F * ",
+                                }),
+                                yc_letter,
+                                new TextRun({
+                                    text: "| + |F * ",
+                                }),
+                                new TextRun({
+                                    text: "y'",
+                                }),
+                                new TextRun({
+                                    text: "c",
+                                    subScript: true
+                                }),
+                                new TextRun({
+                                    text: "| = |" + st.my_load*1000 + "| кН*мм + |" + st.n_load + "| кН * |" + st.report_data.yc + "| мм + |" + st.n_load + "| кН * |" + st.report_data.cut_yc + "| мм = " + st.report_data.my_1 + " кН*мм,",
+                                }),
+                            ],
+                            style: "Norm1"
+                        });
+                    p4 = new Paragraph({                 //"<p>Выражение Mx/M<sub>x,ult</sub> + My/M<sub>y,ult</sub> = " + st.mx_load*1000 + " кН*мм / " + mx_ult + " + " + st.my_load*1000 + " кН*мм / " + my_ult + " = " + st.report_data.m_factor_1 + ",</p>" +
+                            children: [
+                                new TextRun({
+                                    text: "Выражение ",
+                                }),
+                                mx_letter,
+                                new TextRun({
+                                    text: "/",
+                                }),
+                                mxult_letter,
+                                new TextRun({
+                                    text: " + ",
+                                }),
+                                my_letter,
+                                new TextRun({
+                                    text: "/",
+                                }),
+                                myult_letter,
+                                new TextRun({
+                                    text: " = " + st.report_data.mx_1 + " кН*мм / " + mx_ult + " + " + st.report_data.my_1 + " кН*мм / " + my_ult + " = " + st.report_data.m_factor_1 + ",",
+                                }),
+                            ],
+                            style: "Norm1"
+                        });
                     p5 = new Paragraph({                 //Выражение F/(2*F<sub>ult</sub>) = " + st.n_load + " /(2 * " + st.report_data.f_ult  + ") = " + 0.5*st.report_data.n_factor + ",</p>" + 
                             children: [
                                 new TextRun({
@@ -7298,15 +7435,15 @@ class Loads extends React.Component {
                 <h5>Нагрузки</h5>
                 <div className="form-group">
                     <label htmlFor = "input_n_load">Продольная сила N, {this.props.globalState.force_units}:</label>
-                    <input type="number" className="form-control" min="0" id="input_n_load" onChange={this.handleInput}></input>
+                    <input type="number" step="0.0001" className="form-control" min="0" id="input_n_load" onChange={this.handleInput}></input>
                 </div>
                 <div className="form-group">
                     <label htmlFor = "input_mx_load">Изгибающий момент Mx, {this.props.globalState.force_units}м:</label>
-                    <input type="number" className="form-control" id="input_mx_load" onChange={this.handleInput}></input>
+                    <input type="number" step="0.0001" className="form-control" id="input_mx_load" onChange={this.handleInput}></input>
                 </div>
                 <div className="form-group">
                     <label htmlFor = "input_my_load">Изгибающий момент My, {this.props.globalState.force_units}м:</label>
-                    <input type="number" className="form-control" id="input_my_load" onChange={this.handleInput}></input>
+                    <input type="number" step="0.0001" className="form-control" id="input_my_load" onChange={this.handleInput}></input>
                 </div>
             </form>
         );
@@ -7332,11 +7469,11 @@ class ColumnSize extends React.Component {
                 <h5>Cечение колонны</h5>
                 <div className="form-group">
                     <label htmlFor = "input_a_column_size">а, размер вдоль оси Х, {this.props.globalState.length_units}:</label>
-                    <input type="number" className="form-control" min="0" id="input_a_column_size" onChange={this.handleInput}></input>
+                    <input type="number" step="0.0001" className="form-control" min="0" id="input_a_column_size" onChange={this.handleInput}></input>
                 </div>
                 <div className="form-group">
                     <label htmlFor = "input_b_column_size">b, размер вдоль оси Y, {this.props.globalState.length_units}:</label>
-                    <input type="number" className="form-control" min="0" id="input_b_column_size" onChange={this.handleInput}></input>
+                    <input type="number" step="0.0001" className="form-control" min="0" id="input_b_column_size" onChange={this.handleInput}></input>
                 </div>
             </div>
         );
@@ -7362,11 +7499,11 @@ class SlabSize extends React.Component {
                 <h5>Cечение плиты</h5>
                 <div className="form-group">
                     <label htmlFor = "input_t_slab_size">Толщина, {this.props.globalState.length_units}:</label>
-                    <input type="number" className="form-control" min="0" id="input_t_slab_size" onChange={this.handleInput}></input>
+                    <input type="number" step="0.0001" className="form-control" min="0" id="input_t_slab_size" onChange={this.handleInput}></input>
                 </div>
                 <div className="form-group">
                     <label htmlFor = "input_a_slab_size">Привязка центра тяжести арматуры, {this.props.globalState.length_units}:</label>
-                    <input type="number" className="form-control" min="0" id="input_a_slab_size" onChange={this.handleInput}></input>
+                    <input type="number" step="0.0001" className="form-control" min="0" id="input_a_slab_size" onChange={this.handleInput}></input>
                 </div>
             </div>
         );
@@ -7575,7 +7712,7 @@ class ShearReinforcement extends React.Component {
                             <br></br>
                             <div className="form-group">
                                 <label htmlFor = {"input_shear_bars_spacing_to_prev_" + key_number}>Привязка {key_number} ряда поперечной арматуры к предыдущему ряду, {gs.length_units}:</label>
-                                <input type="number" className="form-control" min="0" id = {"input_shear_bars_spacing_to_prev_" + key_number} onChange = {this.handleReinforcementRows}></input>
+                                <input type="number" step="0.0001" className="form-control" min="0" id = {"input_shear_bars_spacing_to_prev_" + key_number} onChange = {this.handleReinforcementRows}></input>
                             </div>
                             <div className="form-group">
                                 <label htmlFor = {"shear_bars_number_X_" + key_number}>{key_number} ряд. Количество стержней вдоль оси Х, шт:</label>
@@ -7684,7 +7821,7 @@ class ShearReinforcement extends React.Component {
                 <div id = "row_1">
                     <div className="form-group">
                         <label htmlFor = "input_shear_bars_spacing_to_prev_1">Привязка 1 ряда поперечной арматуры к грани колонны, {this.props.globalState.length_units}:</label>
-                        <input type="number" className="form-control" min="0" id="input_shear_bars_spacing_to_prev_1" onChange = {this.handleReinforcementRows}></input>
+                        <input type="number" step="0.0001" className="form-control" min="0" id="input_shear_bars_spacing_to_prev_1" onChange = {this.handleReinforcementRows}></input>
                     </div>
                     <div className="form-group">
                         <label htmlFor = "shear_bars_number_X_1">1 ряд. Количество стержней вдоль оси Х, шт:</label>
@@ -7699,7 +7836,7 @@ class ShearReinforcement extends React.Component {
                 <div id = "row_2">
                     <div className="form-group">
                         <label htmlFor = "input_shear_bars_spacing_to_prev_2">Привязка 2 ряда поперечной арматуры к предыдущему ряду, {this.props.globalState.length_units}:</label>
-                        <input type="number" className="form-control" min="0" id="input_shear_bars_spacing_to_prev_2" onChange = {this.handleReinforcementRows}></input>
+                        <input type="number" step="0.0001" className="form-control" min="0" id="input_shear_bars_spacing_to_prev_2" onChange = {this.handleReinforcementRows}></input>
                     </div>
                     <div className="form-group">
                         <label htmlFor = "shear_bars_number_X_2">2 ряд. Количество стержней вдоль оси Х, шт:</label>
@@ -8055,25 +8192,25 @@ class SlabEdgeData extends React.Component {                     //колонн�
                 <div className="form-group">
                     <input type="checkbox" id="edge_left" value="left" onChange={this.handleCheckBox}></input>
                     <label htmlFor="edge_left">Слева, {this.props.globalState.length_units}:</label>
-                    <input type="number" className="form-control" min="0" id="input_edge_left_dist" ref={this.leftFocus} disabled={!this.state.edge_left} onChange={this.handleInput}></input>
+                    <input type="number" step="0.0001" className="form-control" min="0" id="input_edge_left_dist" ref={this.leftFocus} disabled={!this.state.edge_left} onChange={this.handleInput}></input>
                 </div>
                 
                 <div className="form-group">
                     <input type="checkbox" id="edge_right" value="right" onChange={this.handleCheckBox}></input>
                     <label htmlFor="edge_right">Справа, {this.props.globalState.length_units}:</label>
-                    <input type="number" className="form-control" min="0" id="input_edge_right_dist" ref={this.rightFocus} disabled={!this.state.edge_right} onChange={this.handleInput}></input>
+                    <input type="number" step="0.0001" className="form-control" min="0" id="input_edge_right_dist" ref={this.rightFocus} disabled={!this.state.edge_right} onChange={this.handleInput}></input>
                 </div>
 
                 <div className="form-group">
                     <input type="checkbox" id="edge_top" value="top" onChange={this.handleCheckBox}></input>
                     <label htmlFor="edge_top">Сверху, {this.props.globalState.length_units}:</label>
-                    <input type="number" className="form-control" min="0" id="input_edge_top_dist" ref={this.topFocus} disabled={!this.state.edge_top} onChange={this.handleInput}></input>
+                    <input type="number" step="0.0001" className="form-control" min="0" id="input_edge_top_dist" ref={this.topFocus} disabled={!this.state.edge_top} onChange={this.handleInput}></input>
                 </div>
                
                 <div className="form-group">
                     <input type="checkbox" id="edge_bottom" value="bottom" onChange={this.handleCheckBox}></input>
                     <label htmlFor="edge_bottom">Снизу, {this.props.globalState.length_units}:</label>
-                    <input type="number" className="form-control" min="0" id="input_edge_bottom_dist" ref={this.bottomFocus} disabled={!this.state.edge_bottom} onChange={this.handleInput}></input>
+                    <input type="number" step="0.0001" className="form-control" min="0" id="input_edge_bottom_dist" ref={this.bottomFocus} disabled={!this.state.edge_bottom} onChange={this.handleInput}></input>
                 </div>
             </div>
         );
@@ -8195,19 +8332,19 @@ function OpeningIsNearData(props) {                             //отверст
                     <h5>Отверстие {nbr}</h5>
                     <div className="form-group">
                         <label htmlFor = {"opening_a_" + i}>Размер вдоль оси Х, {props.globalState.length_units}:</label>
-                        <input type="number" className="form-control" min="0" id={"opening_a_" + i} value = {input_openings.a[i]} onChange={handleInput}></input>         {/* элементы помнят ввод пользователя (value) - -получают его из стейта */}
+                        <input type="number" step="0.0001" className="form-control" min="0" id={"opening_a_" + i} value = {input_openings.a[i]} onChange={handleInput}></input>         {/* элементы помнят ввод пользователя (value) - -получают его из стейта */}
                     </div>
                     <div className="form-group">
                         <label htmlFor = {"opening_b_" + i}>Размер вдоль оси Y, {props.globalState.length_units}:</label>
-                        <input type="number" className="form-control" min="0" id={"opening_b_" + i} value = {input_openings.b[i]} onChange={handleInput}></input>
+                        <input type="number" step="0.0001" className="form-control" min="0" id={"opening_b_" + i} value = {input_openings.b[i]} onChange={handleInput}></input>
                     </div>
                     <div className="form-group">
                         <label htmlFor = {"opening_X_" + i}>Привязка вдоль оси Х, {props.globalState.length_units}:</label>
-                        <input type="number" className="form-control" id = {"opening_X_" + i} value = {input_openings.X[i]} onChange = {handleInput}></input>
+                        <input type="number" step="0.0001" className="form-control" id = {"opening_X_" + i} value = {input_openings.X[i]} onChange = {handleInput}></input>
                     </div>
                     <div className="form-group">
                         <label htmlFor = {"opening_Y_" + i}>Привязка вдоль оси Y, {props.globalState.length_units}:</label>
-                        <input type="number" className="form-control" id = {"opening_Y_" + i} value = {input_openings.Y[i]} onChange = {handleInput}></input>
+                        <input type="number" step="0.0001" className="form-control" id = {"opening_Y_" + i} value = {input_openings.Y[i]} onChange = {handleInput}></input>
                     </div>
                 </fieldset>;
             openings_html.push(new_opening);

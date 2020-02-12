@@ -881,8 +881,8 @@ class App extends React.Component {                 // это наш главн�
             length_units: "мм",
             t_slab_size: 0,
             a_slab_size: 0,
-            input_t_slab_size: 0,
-            input_a_slab_size: 0,
+            input_t_slab_size: "",
+            input_a_slab_size: "",
             shear_reinforcement: false,
             slab_edge: false,
             slab_edge_type: false,
@@ -6993,6 +6993,7 @@ class App extends React.Component {                 // это наш главн�
 
     render() {
         console.log(this.state);
+        /*
         var row;
         if ((window.innerHeight > 830) || (this.state.v_width <=768) ) {         // стандартная версия для высоких экранов или мобильных браузеров
             row = <Row>
@@ -7095,18 +7096,70 @@ class App extends React.Component {                 // это наш главн�
                         </div>
                     </div>                    
                 </Row> ;
-        }        
-                return (
-                    <Container fluid={true} className = "mb-3">
-                        <Header 
-                            onHelpPush = {this.getData} globalState = {this.state}/>
-                        <Help 
-                            globalState = {this.state}/>
-                        {row}        
-                    </Container>            
-                );
-            }
         }
+        */
+
+        return (
+            <Container fluid={true} className = "mb-3">
+                <Header 
+                    onHelpPush = {this.getData} globalState = {this.state}/>
+                <Help 
+                    globalState = {this.state}/>
+                <Row>
+                    <Col>
+                        <div>
+                            <UnitsOfMeasurement 
+                                onUnitsChange = {this.getData}/>
+                            <Loads 
+                                onLoadChange = {this.getData} globalState = {this.state}/>
+                            <ColumnSize 
+                                onColumnSizeChange = {this.getData} globalState = {this.state}/>
+                        </div>
+                    </Col>
+                    <Col md>
+                        <div>
+                            <SlabSize
+                                    onSlabSizeChange = {this.getData} globalState = {this.state}/>
+                            <Concrete 
+                                    onConcreteChange = {this.getData} />
+                            <ShearReinforcementSelect 
+                                onShearReinforcementSelectChange = {this.getData} globalState = {this.state}/>
+                            <ShearReinforcement 
+                                className = {this.state.shear_reinforcement ? "panelVisible" : "panelInvisible"} 
+                                globalState = {this.state} 
+                                onShearReinforcementChange = {this.getData}/>
+                            <SlabEdgeSelect
+                                onSlabEdgeSelectChange = {this.getData} globalState = {this.state}/>
+                            <SlabEdgeData
+                                className = {this.state.slab_edge ? "panelVisible" : "panelInvisible"} 
+                                globalState = {this.state}
+                                onSlabEdgeDataChange = {this.getData}/>
+                            <OpeningIsNearSelect
+                                onOpeningIsNearSelectChange = {this.getData} globalState = {this.state}/>
+                            <OpeningIsNearData
+                                className = {this.state.openingIsNear ? "panelVisible mb-3" : "panelInvisible"} 
+                                globalState = {this.state}
+                                onOpeningIsNearChange = {this.getData}/>
+                        </div>
+                    </Col>
+                    <div style={{flexGrow: 0, flexShrink: 0, flexBasis: this.state.svg_size + 30}} className="my-sidebar">
+                        <div className = "position-relative">
+                            <div className={this.state.svg_position_fixed ? "position-fixed" : ""}>
+                                <Sketch onSketchChange = {this.getData} globalState = {this.state}/>
+                                <ViewSettings 
+                                    onViewSettingstChange = {this.getData} globalState = {this.state}/>
+                                <Result globalState = {this.state}/>                        
+                                <Button variant="primary" className = {(this.state.result_color !== "secondary") ? "" : "invisible"} onClick = {this.exportToWord}>Сохранить как MS Word</Button>
+                                <canvas id="buffer" width="0" height="0" style = {{display: "none"}}></canvas>
+                            </div>
+                        </div>
+                    </div>                    
+                </Row> ;       
+            </Container>            
+        );
+            
+    }
+}
 
 // дальше идут второстепенные компоненты
 

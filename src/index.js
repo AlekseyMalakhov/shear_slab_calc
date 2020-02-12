@@ -7129,7 +7129,6 @@ class App extends React.Component {                 // это наш главн�
     }
 
     render() {
-        console.log(this.state);
         /*
         var row;
         if ((window.innerHeight > 830) || (this.state.v_width <=768) ) {         // стандартная версия для высоких экранов или мобильных браузеров

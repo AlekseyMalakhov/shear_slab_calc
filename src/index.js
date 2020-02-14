@@ -177,25 +177,24 @@ function findIntersect(u_line, tangent) {            // line intercept math by P
 
 function findAngleReal(coords) {                                      //находим углы относительно 0,0. findAngle и findAngleReal эти две функции одинаковые по сути и их можно (НУЖНО!) в будущем объединить в одну. Щас просто нет времени 
     var result;
-    if ((coords[1] === 0) || !coords[1] || !coords[0]) {
-        result = 1
+    if (coords.length !== 2) {
+        result = 1;
         return result;
     }
     var angle = Math.atan(coords[0]/coords[1]) * 180/Math.PI ;
-    if ((coords[0] > 0) && (coords[1] > 0)) {                               // право верх
+    if ((coords[0] >= 0) && (coords[1] >= 0)) {                               // право верх
         result = angle;
     }
     if ((coords[0] > 0) && (coords[1] < 0)) {                               // право низ
         result = angle + 180;
     }
-    if ((coords[0] < 0) && (coords[1] < 0)) {                               // лево низ
+    if ((coords[0] <= 0) && (coords[1] < 0)) {                               // лево низ
         result = angle + 180;
     }
-    if ((coords[0] < 0) && (coords[1] > 0)) {                               // лево верх
+    if ((coords[0] < 0) && (coords[1] >= 0)) {                               // лево верх
         result = angle + 360;
     }
     result = Number(result.toFixed(3));
-    console.log(result);
     return result;                   //округляем до 3 знака после запятой
 }
 
@@ -364,7 +363,6 @@ function tangCenter(opening_tangents) {                                     //н
     var angle1;
     var angle2;
     for (var i = 1; i < opening_tangents.length; i++) {              //берем отверстие 
-        console.log(opening_tangents);
         angle1 = opening_tangents[i][0][2];                     //здесь мы берем первую касательную каждого отверстия и записываем её угол
         angle2 = opening_tangents[i][1][2];                     //здесь мы берем вторую касательную каждого отверстия и записываем её угол
         
@@ -639,7 +637,28 @@ function calculateCutOff(int_point_1, int_point_2) {            //считаем
     return result;
 }
 
-function addCornersU(coords, uRealCoords, uCornersAngles) {         //проверяем находятся ли реальные координаты углов u внутри треугольника касательных. 
+function findPosition(int_point_1_ang, int_point_2_ang, mid_tans) {         //определяем положение массива отверстий относительно тангент. Т.е. при одном и том же угле, вырубать по малому или большому радиусу
+    console.log(int_point_1_ang);
+    console.log(int_point_2_ang);
+    console.log(mid_tans);
+    var check = [];
+    var result;
+    for (var i = 1; i < mid_tans.length; i++) {
+        if ((mid_tans[i] >= int_point_1_ang) && (mid_tans[i] <= int_point_2_ang)) {
+            result = "standard";
+        } else {
+            result = "non_standard";
+        }
+        check.push(result);
+    }
+    console.log(check);
+    console.log(result);
+    return result;
+}
+
+findPosition(62.103, 257.471, [0, 3.399, 272.199]);
+
+function addCornersU(coords, uRealCoords, uCornersAngles, mid_tans) {         //проверяем находятся ли реальные координаты углов u внутри треугольника касательных. 
     // Если да, то используем угол U как еще одну точку для вычисления вырубок. Возвращаем эррей с вырубками
     // coords - это эррей intersection получаемый после запуска функции findUIntersectPoints, которая получает эррей с углами слитых триугольников и выдает эррей с координатами пересечения треугольников с u
     /*(4) coords = [Array(2), Array(2), Array(2), Array(2)]
@@ -685,9 +704,11 @@ function addCornersU(coords, uRealCoords, uCornersAngles) {         //прове
     var int_point_1, int_point_2;
     var angl_corner;                    
     var int_point_1_ang, int_point_2_ang;
+    var ang1, ang2;
     var cor_num_list = [];                               // список выбитых углов
     var char, char1, char2, char3;                             //характеристики вырубки
     var c_point, c_point1, c_point2;                    //промежуточные точки для расчета
+    var pos;
     
 
     for (var n = 0; n < inters.length; n++) {           
@@ -696,8 +717,13 @@ function addCornersU(coords, uRealCoords, uCornersAngles) {         //прове
 
         int_point_1 = inters[n][0];
         int_point_2 = inters[n][1];
-        int_point_1_ang = findAngleReal(int_point_1);                   //определяем их углы
-        int_point_2_ang = findAngleReal(int_point_2);
+        ang1 = findAngleReal(int_point_1);                   //определяем их углы
+        ang2 = findAngleReal(int_point_2);
+
+        int_point_1_ang = Math.min(ang1, ang2);
+        int_point_2_ang = Math.max(ang1, ang2);
+
+        console.log("Углы = " + int_point_1_ang + " и " + int_point_2_ang);
 
         cor_num_list = [];          //обнуляем список выбитых углов для данного отверстия
 
@@ -705,7 +731,8 @@ function addCornersU(coords, uRealCoords, uCornersAngles) {         //прове
         if (
             ((int_point_1[0] === int_point_2[0]) && ((int_point_1[0] === u[0]) || (int_point_1[0] === u[2]))) || 
             ((int_point_1[1] === int_point_2[1]) && ((int_point_1[1] === u[1]) || (int_point_1[1] === u[3])))
-            ) { 
+            ) {
+                console.log("Просто прямая вырубка");
                 char = calculateCutOff(int_point_1, int_point_2);                      //считаем характеристики вырубки
                 fillResult(char);                                                   // и забиваем их в result
                 result.angles.push([int_point_1_ang, int_point_2_ang]);             //вбиваем углы данного участка, чтобы потом вычислить какие арматурины он вышибает      
@@ -715,23 +742,19 @@ function addCornersU(coords, uRealCoords, uCornersAngles) {         //прове
                 angl_corner = uCornersAngles[j];                                    //угол касательной к рассматриваемому углу u
                 console.log (int_point_1_ang + ", " + angl_corner + ", " + int_point_2_ang);
                 //сначало рассмотрим нестандартный случай - вышибаются 2 угла и обе касательные лежат в 1 и во 4 квадрантах (по разные стороны оси Y)
-                if (                                        
-                    (((int_point_1_ang >= 0) && (int_point_1_ang <= 90) && (int_point_2_ang >= 270) && (int_point_2_ang <= 360)) ||      //проверяем что касательные к отверстию лежат по разные стороны оси У
-                    ((int_point_2_ang >= 0) && (int_point_2_ang <= 90) && (int_point_1_ang >= 270) && (int_point_1_ang <= 360)))
-                    ) {
-                        if (                                                                                                //если это нестандартный случай то выполняем эту проверку
-                            (((angl_corner >=270) && (int_point_1_ang >= 270) && (angl_corner >= int_point_1_ang)) ||
-                            ((angl_corner <=90) && (int_point_1_ang <= 90) && (angl_corner <= int_point_1_ang)) ||
-                            ((angl_corner >=270) && (int_point_2_ang >= 270) && (angl_corner >= int_point_2_ang)) ||
-                            ((angl_corner <=90) && (int_point_2_ang <= 90) && (angl_corner <= int_point_2_ang)))
-                            ) {
-                            cor_num_list.push(j);                                                       //если проверка проходит, зыбиваем выбитый угол в список
-                        }
-                } else {    //если случай стандартный - выполняем эту проверку
-                    if (                                                                     // если случай стандартный, то проверяем по этой проверке
-                        ((int_point_1_ang < angl_corner) && (int_point_2_ang > angl_corner)) ||         //Берем 1 угол и проверяем - если касательная к углу u находится между касательными к точкам пересечения, то он вышибается
-                            ((int_point_1_ang > angl_corner) && (int_point_2_ang < angl_corner))
-                        ) {                
+                if ((int_point_1_ang >= 0) && (int_point_1_ang <= 90) && (int_point_2_ang >= 270) && (int_point_2_ang <= 360)) {      //проверяем что касательные к отверстию лежат по разные стороны оси У
+                    console.log("нестандартный случай");
+                    if (                                                                                                //если это нестандартный случай то выполняем эту проверку
+                        ((angl_corner >=270) && (int_point_2_ang >= 270) && (angl_corner >= int_point_2_ang)) ||
+                        ((angl_corner <=90) && (int_point_1_ang <= 90) && (angl_corner <= int_point_1_ang))
+                        ) {
+                        cor_num_list.push(j);                                                       //если проверка проходит, зыбиваем выбитый угол в список
+                    }
+                } else {    // если случай стандартный, то проверяем по этой проверке
+                    console.log("стандартный случай");
+                    pos = findPosition(int_point_1_ang, int_point_2_ang, mid_tans);
+                    console.log(pos);
+                    if ((int_point_1_ang < angl_corner) && (int_point_2_ang > angl_corner)) {        //Берем 1 угол и проверяем - если касательная к углу u находится между касательными к точкам пересечения, то он вышибается
                         cor_num_list.push(j);                   //если проверка проходит, зыбиваем выбитый угол в список
                     }
                 }
@@ -739,7 +762,26 @@ function addCornersU(coords, uRealCoords, uCornersAngles) {         //прове
 
             // считаем длину выбитых участков в зависимости от количества выбитых углов
             console.log("Отверстие " + n + ". Число выбитых узлов = " +  cor_num_list.length);
-            console.log("Выбиты углы " + cor_num_list);       
+            console.log("Выбиты углы " + cor_num_list);
+            if (pos === "non_standard") {
+                console.log("Т.к. pos = non_standard - меняем углы на противоположные");
+                var new_cor_num_list = [];
+                var corners_list = [0, 1, 2, 3];
+                var match;
+                for (var s = 0; s < corners_list.length; s++) {
+                    match = false;
+                    for (var t = 0; t < cor_num_list.length; t++) {
+                        if (corners_list[s] === cor_num_list[t]) {
+                            match = true;
+                        }
+                    }
+                    if (!match) {
+                        new_cor_num_list.push(corners_list[s]);
+                    }                    
+                }
+                console.log("Новый список выбитых углов " + new_cor_num_list);
+                cor_num_list = new_cor_num_list;
+            }       
             if (cor_num_list.length === 1) {                                    // если выбит 1 угол то
                 c_point = u_corners[cor_num_list[0]];                       //координаты выбитого угла
                 char1 = calculateCutOff(int_point_1, c_point);                      //считаем характеристики вырубки 1
@@ -1157,28 +1199,18 @@ class App extends React.Component {                 // это наш главн�
             real_opening = st.openingsRealCoords[i];                        //берем реальное отверстие. По ним мы будем считать углы, т.к. они используются в расчетах и соответственно должны быть 
             //точные и не зависеть от масштаба отображения. Потому что если их считать по openingsDisplayCoords, при изменении масштаба они будут немного гулять из-за округления и соответствнено будет менятся результат
             if (checkOpeningDistance(st, i)) {                            // если данное отверстие расположено на расстоянии менее 6h от колонны, то мы рисуем касательные
-                console.log("мы здесь 1");
                 opening_tangents[i] = [];                                          //и вытаскиваем из него координаты углов, которые будут нашими конечными точками касательных. Каждое отверстие имеет 4 касательных
                 angles[i] = [];                                                    // составляем список углов
 
                 
                 opening_tangents[i].push([opening[0], opening[1], findAngleReal([real_opening[0], real_opening[1]])]);         //x1, y1, угол - касательная 1
-                console.log(real_opening[0], real_opening[1]);
-
                 opening_tangents[i].push([opening[2], opening[1], findAngleReal([real_opening[2], real_opening[1]])]);         //x2, y1, угол - касательная 2
-                console.log(real_opening[2], real_opening[1]);
-
                 opening_tangents[i].push([opening[2], opening[3], findAngleReal([real_opening[2], real_opening[3]])]);         //x2, y2, угол - касательная 3
-                console.log(real_opening[2], real_opening[3]);
-
                 opening_tangents[i].push([opening[0], opening[3], findAngleReal([real_opening[0], real_opening[3]])]);         //x1, y2, угол - касательная 4
-                console.log(real_opening[0], real_opening[3]);
                 
                 for (var k = 0; k < opening_tangents[i].length; k++) {
                     angles[i].push(opening_tangents[i][k][2]);
                 }
-
-                console.log(angles[i]);
 
                 min_angle = Math.min(...angles[i]);                                     //находим минимальный угол из списка
                 max_angle = Math.max(...angles[i]);                                     //находим максимальный угол из списка
@@ -1627,7 +1659,7 @@ class App extends React.Component {                 // это наш главн�
             var coords_intersect = findUIntersectPoints(merged_angls, st.uRealCoords);
 
             // проходимся по всем координатам точек пересечения, и вычисляем все вырубки
-            cut_chars = addCornersU(coords_intersect, st.uRealCoords, st.uCornersAngles);
+            cut_chars = addCornersU(coords_intersect, st.uRealCoords, st.uCornersAngles, st.geom_chars.mid_tans);
 
             //считаем сумму вырубок u, iby, ibx
             for (var i = 0; i < cut_chars.cut_u.length; i++) {
@@ -7144,7 +7176,6 @@ class App extends React.Component {                 // это наш главн�
 
     render() {
         console.log(this.state);
-        console.log(this.state.geom_chars.mid_tans);
         /*
         var row;
         if ((window.innerHeight > 830) || (this.state.v_width <=768) ) {         // стандартная версия для высоких экранов или мобильных браузеров

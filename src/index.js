@@ -110,6 +110,7 @@ function checkDataAdequacy(state) {                             // провер�
                         && (id !== "u_show")
                         && (id !== "in_out_asw_show")
                         && (id !== "op_tangents_show")
+                        && (id !== "merged_angls")
                          ) {
                             result.push(id);                //если в state есть незаполненная графа - добавляем её в результат
         }

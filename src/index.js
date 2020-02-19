@@ -530,38 +530,31 @@ console.log(test_res);
 
 
 function tangCenter(opening_tangents) {                                     //найдем биссектрису угла между крайними касательными к отверсти
-    var result = [0];
-    /*
-    var angle1;
-    var angle2;
-    for (var i = 1; i < opening_tangents.length; i++) {              //берем отверстие 
-        angle1 = opening_tangents[i][0][2];                     //здесь мы берем первую касательную каждого отверстия и записываем её угол
-        angle2 = opening_tangents[i][1][2];                     //здесь мы берем вторую касательную каждого отверстия и записываем её угол
-        
-        if ((angle1 < 90) && (angle2 > 270)) {                  //если отверстие  лежит на половину в 1 на половину во 2 квадранте
-            result[i] = angle2 + (angle1 + 360 - angle2)/2;
-            if (result[i] > 360) {
-                result[i] = result[i] - 360;
-            }
-        }        
-        else if ((angle2 < 90) && (angle1 > 270)) {                  //если отверстие  лежит на половину в 1 на половину во 2 квадранте
-            result[i] = angle2 - (360 - angle1 + angle2)/2;
-            if (result[i] > 360) {
-                result[i] = result[i] - 360;
-            }
-        } else {                                            //стандартный случай
-            result[i] = (angle1 + angle2)/2;
-        }
-        result[i] = Number(result[i].toFixed(3));
-    }
-    */
-
     // находим координаты касательных на расстоянии 10000 используя функцию findAngleCoords
     // находим координату центра между двумя точками используя функцию findCenter
     // находим угол данной точки используя функцию findAngleReal
+    var result = [0];
+    var angle1;
+    var angle2;
+    var coord1, coord2, center;
+    for (var i = 1; i < opening_tangents.length; i++) {              //берем отверстие 
+        angle1 = opening_tangents[i][0][2];                     //здесь мы берем первую касательную каждого отверстия и записываем её угол
+        angle2 = opening_tangents[i][1][2];                     //здесь мы берем вторую касательную каждого отверстия и записываем её угол
+        coord1 = findAngleCoords(angle1, 10000);                //находим координаты второй точки касательной на расстоянии 10000
+        coord2 = findAngleCoords(angle2, 10000);
+        center = findCenter(coord1, coord2);                    //находим координаты центра между этими двумя точками
+        result[i] = findAngleReal(center);                      //находим угол к данной точке
+        /*
+        console.log(i + " _ " + angle1 + ", " + angle2);
+        console.log(i + " _ " + coord1 + ", " + coord2);
+        console.log(i + " _ " + center);
+        console.log(i + " _ " + result[i]);
+        */
+    }
+    return result;
 }
 
-/*
+
 var test_op_1 = [
     [],
     [
@@ -588,7 +581,7 @@ var test_op_1 = [
 
 var testtangCenter = tangCenter(test_op_1);
 console.log(testtangCenter);
-*/
+
 
 
 
@@ -1205,6 +1198,23 @@ function addCornersU(coords, uRealCoords, uCornersAngles, mid_tans, merged_angls
     
 
     function calcCornersCuts(cor_num_list, int_point_1, int_point_2) {
+        /*
+        pos = findPosition(int_point_1_ang, int_point_2_ang, mid_tans);
+        */
+       
+       //1) Берем угол 1 касательной и проходимся по списку углов st.opening_tangents_real и ищем совпадение с углами. Определяем к какому исходному
+       //отверстию принадлежит данная касательная. Пусть это отверстия G
+       //2) Берем угол 2 касательной и проходимся по списку углов st.opening_tangents_real и ищем совпадение с углами. Определяем к какому исходному
+       //отверстию принадлежит данная касательная. Пусть это отверстия D
+       //1) берем угол 1 касательной, строим точку на расстоянии 10 000 - точка a
+       //2) берем угол 2 касательной, строим точку на расстоянии 10 000 - точка b
+       //3) проводим линию между точкамиa ab
+       //4) Берем из мид тангентс биссектрису которая относится к отверстию G и пробиваем её с линией ab
+       //4) Берем из мид тангентс биссектрису которая относится к отверстию D и пробиваем её с линией ab
+       //5) Если хоть одна биссектриса пересеклась с ab - это стандартный случай (выбивка меньше 180 градусов)
+       //5) Если ни одна биссектриса не пересеклась с ab  - это нестандартный случай, выбивка больше 180 градусов, переходим в calcCornersCuts и меняем список выбитых углов на противоположный.
+       //6) Также нужно поменять выбивку кружков арматуры на противоположный
+
         if (cor_num_list.length === 1) {                                    // если выбит 1 угол то
             c_point = u_corners[cor_num_list[0]];                       //координаты выбитого угла
             char1 = calculateCutOff(int_point_1, c_point);                      //считаем характеристики вырубки 1

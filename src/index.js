@@ -449,11 +449,29 @@ function merge(opt) {                   //1 проходка на слияние
                 sum_angles = sumTriangles(angles);
                 console.log("Их суммарные углы = " + sum_angles);
                 new_angles.push(sum_angles);    
+            } else {
+                console.log("Отверстия " + i + " и " + j + " не накладываются");
             }
         }
     }
     return new_angles;       
 }
+
+
+var merge_test = [
+    [],
+    [
+        [-450, 850, 332.103],
+        [-450, -650, 214.695],
+    ],
+    [
+        [-375, 275, 306.254],
+        [-375, -75, 258.69],
+    ],
+];
+
+console.log(merge(merge_test));
+
 
 function mergeOpenings(opening_tangents) {              //пробуем слить пересекающиеся все треугольники касательных  в один
     var prelim_result_1 = [];                                   // предварительный результат 1 - эррей с углами
@@ -554,7 +572,7 @@ function tangCenter(opening_tangents) {                                     //н
     return result;
 }
 
-
+/*
 var test_op_1 = [
     [],
     [
@@ -581,6 +599,7 @@ var test_op_1 = [
 
 var testtangCenter = tangCenter(test_op_1);
 console.log(testtangCenter);
+*/
 
 
 
@@ -874,7 +893,7 @@ function calculateCutOff(int_point_1, int_point_2) {            //считаем
     return result;
 }
 
-function findPosition(int_point_1_ang, int_point_2_ang, mid_tans) {         //определяем положение массива отверстий относительно тангент. Т.е. при одном и том же угле, вырубать по малому или большому радиусу
+function findPosition(int_point_1_ang, int_point_2_ang, mid_tans, opening_tangents) {         //определяем положение массива отверстий относительно тангент. Т.е. при одном и том же угле, вырубать по малому или большому радиусу
     console.log(int_point_1_ang);
     console.log(int_point_2_ang);
     console.log(mid_tans);
@@ -894,7 +913,11 @@ function findPosition(int_point_1_ang, int_point_2_ang, mid_tans) {         //о
 }
 
 /*
-findPosition(62.103, 257.471, [0, 3.399, 272.199]);
+var int_point_1_test
+var int_point_2_test
+var mid_tans_test4
+var opening_tangents_test4
+
 */
 
 function ptInTriangle(p, p0, p1, p2) {                  //находит, лежит ли точка внутри треугольника. Взята от сюда http://jsfiddle.net/PerroAZUL/zdaY8/1/
@@ -939,7 +962,7 @@ function createCornerList(u_corners, triangles) {   // создаем списо
     return corner_list;
 }
 
-function addCornersU(coords, uRealCoords, uCornersAngles, mid_tans, merged_angls) {         //проверяем находятся ли реальные координаты углов u внутри треугольника касательных. 
+function addCornersU(coords, uRealCoords, uCornersAngles, mid_tans, merged_angls, opening_tangents) {         //проверяем находятся ли реальные координаты углов u внутри треугольника касательных. 
     // Если да, то используем угол U как еще одну точку для вычисления вырубок. Возвращаем эррей с вырубками
     // coords - это эррей intersection получаемый после запуска функции findUIntersectPoints, которая получает эррей с углами слитых триугольников и выдает эррей с координатами пересечения треугольников с u
     /*(4) coords = [
@@ -1060,7 +1083,10 @@ function addCornersU(coords, uRealCoords, uCornersAngles, mid_tans, merged_angls
 
             if (corner_list[a].length !== 0) {      // если отверстие выбивает углы
                 console.log("Отверстие " + a + " выбивает углы " + corner_list[a]);
-                calcCornersCuts(corner_list[a], coords[a][0], coords[a][1]);
+                console.log(int_point_1_ang + ", " + int_point_2_ang);
+                console.log(corner_list[a]);
+                console.log(coords[a][0] + ", " + coords[a][1]);
+                calcCornersCuts(corner_list[a], coords[a][0], coords[a][1], opening_tangents);
             } else {                                    //если отверстие не выбивает углы
                 char = calculateCutOff(coords[a][0], coords[a][1]);                      //считаем характеристики вырубки
                 fillResult(char);                                                   // и забиваем их в result
@@ -1197,9 +1223,9 @@ function addCornersU(coords, uRealCoords, uCornersAngles, mid_tans, merged_angls
 
     
 
-    function calcCornersCuts(cor_num_list, int_point_1, int_point_2) {
+    function calcCornersCuts(cor_num_list, int_point_1, int_point_2, opening_tangents) {
         /*
-        pos = findPosition(int_point_1_ang, int_point_2_ang, mid_tans);
+        pos = findPosition(int_point_1_ang, int_point_2_ang, mid_tans, opening_tangents);
         */
        
        //1) Берем угол 1 касательной и проходимся по списку углов st.opening_tangents_real и ищем совпадение с углами. Определяем к какому исходному
@@ -2161,7 +2187,7 @@ class App extends React.Component {                 // это наш главн�
             var coords_intersect = findUIntersectPoints(merged_angls, st.uRealCoords);
 
             // проходимся по всем координатам точек пересечения, и вычисляем все вырубки
-            cut_chars = addCornersU(coords_intersect, st.uRealCoords, st.uCornersAngles, st.geom_chars.mid_tans, merged_angls);
+            cut_chars = addCornersU(coords_intersect, st.uRealCoords, st.uCornersAngles, st.geom_chars.mid_tans, merged_angls, st.opening_tangents_real);
 
             //считаем сумму вырубок u, iby, ibx
             for (var i = 0; i < cut_chars.cut_u.length; i++) {

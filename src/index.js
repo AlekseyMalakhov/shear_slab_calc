@@ -796,7 +796,7 @@ function createCornerList(u_corners, triangles) {   // создаем списо
     return corner_list;
 }
 
-function addCornersU(coords, uRealCoords, merged_angls, opening_tangents) {         //проверяем находятся ли реальные координаты углов u внутри треугольника касательных. 
+function addCornersU(coords, uRealCoords, uCornersAngles, mid_tans, merged_angls, opening_tangents) {         //проверяем находятся ли реальные координаты углов u внутри треугольника касательных. 
     // Если да, то используем угол U как еще одну точку для вычисления вырубок. Возвращаем эррей с вырубками
     // coords - это эррей intersection получаемый после запуска функции findUIntersectPoints, которая получает эррей с углами слитых триугольников и выдает эррей с координатами пересечения треугольников с u
     /*(4) coords = [
@@ -892,6 +892,7 @@ function addCornersU(coords, uRealCoords, merged_angls, opening_tangents) {     
 
         for (var a = 0; a < coords.length; a++) {
             int_point_1_ang = Math.min(merged_angls[a][0], merged_angls[a][1]);
+            console.log(merged_angls[a][0] + ", " + merged_angls[a][1] + ", " + int_point_1_ang);
             int_point_2_ang = Math.max(merged_angls[a][0], merged_angls[a][1]);
 
             if (corner_list[a].length !== 0) {      // если отверстие выбивает углы
@@ -981,7 +982,7 @@ function addCornersU(coords, uRealCoords, merged_angls, opening_tangents) {     
 }
 
 
-/*
+
 
 var coords_test = [
                     [
@@ -1004,7 +1005,7 @@ var angles_test_3 = [
 var test_1 = addCornersU(coords_test, uRealCoords_test, uCornersAngles_test, mid_tans_test, angles_test_3);
 console.log(test_1);
 
-*/
+
 
 
 function findEmptyOps(openings) {                       //находим отверстия с неполностью заполненными характеристиками, чтобы не включать их в расчет

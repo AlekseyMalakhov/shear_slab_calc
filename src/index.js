@@ -7609,6 +7609,20 @@ function Help(props) {
                 <p>Также данная версия программы имеет одно ограничение: если у вас, несколько отверстий сливаются в одно и суммарный выбиваемый угол превышает 180 градусов (например, вот так), программа 
                     посчитает его неправильно. На данный момент я не придумал простого и надежного алгоритма как научить программу отличать углы больше 180 градусов от им обратным (например если у вас 
                     наложенные отверстия выбью угол  210 градусов, программа посчитает что выбитый угол равен 360-210 = 150 градусов.</p>
+                    <div className="card-deck mb-3">
+                        <div className="card text-center" style={{maxWidth: 450}}>
+                            <div className="card-body">
+                                <h5 className="card-title">Работает</h5>
+                            </div>
+                            <img src="./pic/good_2.png" className="card-img-bottom" alt="хорошо"></img>
+                        </div>
+                        <div className="card text-center" style={{maxWidth: 450}}>
+                            <div className="card-body">
+                                <h5 className="card-title">Не работает:(</h5>
+                            </div>
+                            <img src="./pic/bad_2.png" className="card-img-bottom" alt="плохо"></img>
+                        </div>                          
+                    </div>
                 <p>Для любителей покапаться в коде вот <a href="https://github.com/AlekseyMalakhov/shear_slab_calc">ссылка на GitHub</a> - милости просим.</p>
                 <p>Обсуждение программы на dwg.ru <a href="https://github.com/AlekseyMalakhov/shear_slab_calc">здесь.</a></p>
                 <p>Приятного пользования! TermenVox. 2020г. <a href="mailto:hexel@tut.by">hexel@tut.by</a></p>

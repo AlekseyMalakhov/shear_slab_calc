@@ -535,18 +535,21 @@ function tangCenter(opening_tangents) {                                     //н
     var angle2;
     var coord1, coord2, center;
     for (var i = 1; i < opening_tangents.length; i++) {              //берем отверстие 
-        angle1 = opening_tangents[i][0][2];                     //здесь мы берем первую касательную каждого отверстия и записываем её угол
-        angle2 = opening_tangents[i][1][2];                     //здесь мы берем вторую касательную каждого отверстия и записываем её угол
-        coord1 = findAngleCoords(angle1, 10000);                //находим координаты второй точки касательной на расстоянии 10000
-        coord2 = findAngleCoords(angle2, 10000);
-        center = findCenter(coord1, coord2);                    //находим координаты центра между этими двумя точками
-        result[i] = findAngleReal(center);                      //находим угол к данной точке
-        /*
-        console.log(i + " _ " + angle1 + ", " + angle2);
-        console.log(i + " _ " + coord1 + ", " + coord2);
-        console.log(i + " _ " + center);
-        console.log(i + " _ " + result[i]);
-        */
+        if (opening_tangents[i].length === 2) {
+            angle1 = opening_tangents[i][0][2];                     //здесь мы берем первую касательную каждого отверстия и записываем её угол
+            angle2 = opening_tangents[i][1][2];                     //здесь мы берем вторую касательную каждого отверстия и записываем её угол
+            console.log("i = " + i + ", " + angle1 + ", " +  angle2);
+            coord1 = findAngleCoords(angle1, 10000);                //находим координаты второй точки касательной на расстоянии 10000
+            coord2 = findAngleCoords(angle2, 10000);
+            center = findCenter(coord1, coord2);                    //находим координаты центра между этими двумя точками
+            result[i] = findAngleReal(center);                      //находим угол к данной точке
+            /*
+            console.log(i + " _ " + angle1 + ", " + angle2);
+            console.log(i + " _ " + coord1 + ", " + coord2);
+            console.log(i + " _ " + center);
+            console.log(i + " _ " + result[i]);
+            */
+        }
     }
     return result;
 }
@@ -1434,6 +1437,7 @@ class App extends React.Component {                 // это наш главн�
                     }
                 }
             } else {
+                console.log("Данное отверстие далеко");
                 final_opening_tangents[i] = [];                 // если отверстие дальше 6h, тогда пустая строка
                 final_opening_tangents_real[i] = [];
             }

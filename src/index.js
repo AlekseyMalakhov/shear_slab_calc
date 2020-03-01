@@ -3458,68 +3458,77 @@ class App extends React.Component {                 // это наш главн�
             result = result.concat(part1, part2, part3, part4, part5, part6);
 
             function u_phrase() {
-                var result = [
-                    new TextRun({
-                        text: "u' = ",
-                    })
-                ];
-                var part1 = [];
-                var part2 = [];
-                for (var i = 0; i < st.report_data.cut_chars.cut_u.length; i++) {
-                    if (i === 0) {
-                        part1 = [
-                            new TextRun({
-                                text: "u'",
-                            }),
-                            new TextRun({
-                                text: (i+1),
-                                subScript: true
-                            })
-                        ];
-                    } else {
-                        part1 = [
-                            new TextRun({
-                                text: " + ",
-                            }),
-                            new TextRun({
-                                text: "u'",
-                            }),
-                            new TextRun({
-                                text: (i+1),
-                                subScript: true
-                            }),                        
-                        ];
-                    }                    
-                    result = result.concat(part1);
+                var result;
+                if (st.report_data.cut_chars.cut_u.length > 0) {
+                    result = [
+                        new TextRun({
+                            text: "u' = ",
+                        })
+                    ];
+                    var part1 = [];
+                    var part2 = [];
+                    for (var i = 0; i < st.report_data.cut_chars.cut_u.length; i++) {
+                        if (i === 0) {
+                            part1 = [
+                                new TextRun({
+                                    text: "u'",
+                                }),
+                                new TextRun({
+                                    text: (i+1),
+                                    subScript: true
+                                })
+                            ];
+                        } else {
+                            part1 = [
+                                new TextRun({
+                                    text: " + ",
+                                }),
+                                new TextRun({
+                                    text: "u'",
+                                }),
+                                new TextRun({
+                                    text: (i+1),
+                                    subScript: true
+                                }),                        
+                            ];
+                        }                    
+                        result = result.concat(part1);
+                    }
+                    for (var i = 0; i < st.report_data.cut_chars.cut_u.length; i++) {
+                        if (i === 0) {
+                            part2 = [
+                                new TextRun({
+                                    text: " = ",
+                                }),
+                                new TextRun({
+                                    text: st.report_data.cut_chars.cut_u[i],
+                                }),                            
+                            ];
+                        } else {
+                            part2 = [
+                                new TextRun({
+                                    text: " + ",
+                                }),
+                                new TextRun({
+                                    text: st.report_data.cut_chars.cut_u[i],
+                                }),                            
+                            ];
+                        }                    
+                        result = result.concat(part2);
+                    }
+                    var part3 = [
+                        new TextRun({
+                            text: " = " + st.report_data.cut_off + " мм,",
+                        }),
+                    ];
+                    result = result.concat(part3);
+                } else {
+                    result = [
+                        new TextRun({
+                            text: "u' = 0 мм",
+                        })
+                    ];
                 }
-                for (var i = 0; i < st.report_data.cut_chars.cut_u.length; i++) {
-                    if (i === 0) {
-                        part2 = [
-                            new TextRun({
-                                text: " = ",
-                            }),
-                            new TextRun({
-                                text: st.report_data.cut_chars.cut_u[i],
-                            }),                            
-                        ];
-                    } else {
-                        part2 = [
-                            new TextRun({
-                                text: " + ",
-                            }),
-                            new TextRun({
-                                text: st.report_data.cut_chars.cut_u[i],
-                            }),                            
-                        ];
-                    }                    
-                    result = result.concat(part2);
-                }
-                var part3 = [
-                    new TextRun({
-                        text: " = " + st.report_data.cut_off + " мм,",
-                    }),
-                ];
-                result = result.concat(part3);
                 return result;
             }
 
@@ -3791,317 +3800,394 @@ class App extends React.Component {                 // это наш главн�
             }
 
             function ibx_tot_phrase() {
-                var result = [
-                    new TextRun({
-                        text: "I'",
-                    }),
-                    new TextRun({
-                        text: "bx",
-                        subScript: true
-                    }),
-                    new TextRun({
-                        text: " = ",
-                    })
-                ];
-                var part1 = [];
-                var part2 = [];
-                for (var i = 0; i < st.report_data.cut_chars.cut_u.length; i++) {
-                    if (i === 0) {
-                        part1 = [
-                            new TextRun({
-                                text: "I'",
-                            }),
-                            new TextRun({
-                                text: "bx" + (i+1),
-                                subScript: true
-                            })
-                        ];
-                    } else {
-                        part1 = [
-                            new TextRun({
-                                text: " + ",
-                            }),
-                            new TextRun({
-                                text: "I'",
-                            }),
-                            new TextRun({
-                                text: "bx" + (i+1),
-                                subScript: true
-                            }),                        
-                        ];
-                    }                    
-                    result = result.concat(part1);
+                var result;
+                if (st.report_data.cut_chars.cut_u.length > 0) {
+                    result = [
+                        new TextRun({
+                            text: "I'",
+                        }),
+                        new TextRun({
+                            text: "bx",
+                            subScript: true
+                        }),
+                        new TextRun({
+                            text: " = ",
+                        })
+                    ];
+                    var part1 = [];
+                    var part2 = [];
+                    for (var i = 0; i < st.report_data.cut_chars.cut_u.length; i++) {
+                        if (i === 0) {
+                            part1 = [
+                                new TextRun({
+                                    text: "I'",
+                                }),
+                                new TextRun({
+                                    text: "bx" + (i+1),
+                                    subScript: true
+                                })
+                            ];
+                        } else {
+                            part1 = [
+                                new TextRun({
+                                    text: " + ",
+                                }),
+                                new TextRun({
+                                    text: "I'",
+                                }),
+                                new TextRun({
+                                    text: "bx" + (i+1),
+                                    subScript: true
+                                }),                        
+                            ];
+                        }                    
+                        result = result.concat(part1);
+                    }
+                    for (var i = 0; i < st.report_data.cut_chars.cut_u.length; i++) {
+                        if (i === 0) {
+                            part2 = [
+                                new TextRun({
+                                    text: " = ",
+                                }),
+                                new TextRun({
+                                    text: st.report_data.cut_chars.cut_ibx[i],
+                                }),                            
+                            ];
+                        } else {
+                            part2 = [
+                                new TextRun({
+                                    text: " + ",
+                                }),
+                                new TextRun({
+                                    text: st.report_data.cut_chars.cut_ibx[i],
+                                }),                            
+                            ];
+                        }                    
+                        result = result.concat(part2);
+                    }
+                    var part3 = [
+                        new TextRun({
+                            text: " = " + st.report_data.cut_off_ibx + " мм",
+                        }),
+                        sup_3,
+                        new TextRun({
+                            text: ",",
+                        }),
+                    ];
+                    result = result.concat(part3);
+                } else {
+                    result = [
+                        new TextRun({
+                            text: "I'",
+                        }),
+                        new TextRun({
+                            text: "bx",
+                            subScript: true
+                        }),
+                        new TextRun({
+                            text: " = 0 мм",
+                        }),
+                        sup_3,
+                        new TextRun({
+                            text: ",",
+                        }),
+                    ];
                 }
-                for (var i = 0; i < st.report_data.cut_chars.cut_u.length; i++) {
-                    if (i === 0) {
-                        part2 = [
-                            new TextRun({
-                                text: " = ",
-                            }),
-                            new TextRun({
-                                text: st.report_data.cut_chars.cut_ibx[i],
-                            }),                            
-                        ];
-                    } else {
-                        part2 = [
-                            new TextRun({
-                                text: " + ",
-                            }),
-                            new TextRun({
-                                text: st.report_data.cut_chars.cut_ibx[i],
-                            }),                            
-                        ];
-                    }                    
-                    result = result.concat(part2);
-                }
-                var part3 = [
-                    new TextRun({
-                        text: " = " + st.report_data.cut_off_ibx + " мм",
-                    }),
-                    sup_3,
-                    new TextRun({
-                        text: ",",
-                    }),
-                ];
-                result = result.concat(part3);
                 return result;
             }
 
             function iby_tot_phrase() {
-                var result = [
-                    new TextRun({
-                        text: "I'",
-                    }),
-                    new TextRun({
-                        text: "by",
-                        subScript: true
-                    }),
-                    new TextRun({
-                        text: " = ",
-                    })
-                ];
-                var part1 = [];
-                var part2 = [];
-                for (var i = 0; i < st.report_data.cut_chars.cut_u.length; i++) {
-                    if (i === 0) {
-                        part1 = [
-                            new TextRun({
-                                text: "I'",
-                            }),
-                            new TextRun({
-                                text: "by" + (i+1),
-                                subScript: true
-                            })
-                        ];
-                    } else {
-                        part1 = [
-                            new TextRun({
-                                text: " + ",
-                            }),
-                            new TextRun({
-                                text: "I'",
-                            }),
-                            new TextRun({
-                                text: "by" + (i+1),
-                                subScript: true
-                            }),                        
-                        ];
-                    }                    
-                    result = result.concat(part1);
+                var result;
+                if (st.report_data.cut_chars.cut_u.length > 0) {
+                    result = [
+                        new TextRun({
+                            text: "I'",
+                        }),
+                        new TextRun({
+                            text: "by",
+                            subScript: true
+                        }),
+                        new TextRun({
+                            text: " = ",
+                        })
+                    ];
+                    var part1 = [];
+                    var part2 = [];
+                    for (var i = 0; i < st.report_data.cut_chars.cut_u.length; i++) {
+                        if (i === 0) {
+                            part1 = [
+                                new TextRun({
+                                    text: "I'",
+                                }),
+                                new TextRun({
+                                    text: "by" + (i+1),
+                                    subScript: true
+                                })
+                            ];
+                        } else {
+                            part1 = [
+                                new TextRun({
+                                    text: " + ",
+                                }),
+                                new TextRun({
+                                    text: "I'",
+                                }),
+                                new TextRun({
+                                    text: "by" + (i+1),
+                                    subScript: true
+                                }),                        
+                            ];
+                        }                    
+                        result = result.concat(part1);
+                    }
+                    for (var i = 0; i < st.report_data.cut_chars.cut_u.length; i++) {
+                        if (i === 0) {
+                            part2 = [
+                                new TextRun({
+                                    text: " = ",
+                                }),
+                                new TextRun({
+                                    text: st.report_data.cut_chars.cut_iby[i],
+                                }),                            
+                            ];
+                        } else {
+                            part2 = [
+                                new TextRun({
+                                    text: " + ",
+                                }),
+                                new TextRun({
+                                    text: st.report_data.cut_chars.cut_iby[i],
+                                }),                            
+                            ];
+                        }                    
+                        result = result.concat(part2);
+                    }
+                    var part3 = [
+                        new TextRun({
+                            text: " = " + st.report_data.cut_off_iby + " мм",
+                        }),
+                        sup_3,
+                        new TextRun({
+                            text: ",",
+                        }),
+                    ];
+                    result = result.concat(part3);
+                } else {
+                    result = [
+                        new TextRun({
+                            text: "I'",
+                        }),
+                        new TextRun({
+                            text: "by",
+                            subScript: true
+                        }),
+                        new TextRun({
+                            text: " = 0 мм",
+                        }),
+                        sup_3,
+                        new TextRun({
+                            text: ",",
+                        }),
+                    ];
                 }
-                for (var i = 0; i < st.report_data.cut_chars.cut_u.length; i++) {
-                    if (i === 0) {
-                        part2 = [
-                            new TextRun({
-                                text: " = ",
-                            }),
-                            new TextRun({
-                                text: st.report_data.cut_chars.cut_iby[i],
-                            }),                            
-                        ];
-                    } else {
-                        part2 = [
-                            new TextRun({
-                                text: " + ",
-                            }),
-                            new TextRun({
-                                text: st.report_data.cut_chars.cut_iby[i],
-                            }),                            
-                        ];
-                    }                    
-                    result = result.concat(part2);
-                }
-                var part3 = [
-                    new TextRun({
-                        text: " = " + st.report_data.cut_off_iby + " мм",
-                    }),
-                    sup_3,
-                    new TextRun({
-                        text: ",",
-                    }),
-                ];
-                result = result.concat(part3);
                 return result;
             }
 
             function sx_tot_phrase() {
-                var result = [
-                    new TextRun({
-                        text: "S'",
-                    }),
-                    new TextRun({
-                        text: "x",
-                        subScript: true
-                    }),
-                    new TextRun({
-                        text: " = ",
-                    })
-                ];
-                var part1 = [];
-                var part2 = [];
-                for (var i = 0; i < st.report_data.cut_chars.cut_u.length; i++) {
-                    if (i === 0) {
-                        part1 = [
-                            new TextRun({
-                                text: "S'",
-                            }),
-                            new TextRun({
-                                text: "x" + (i+1),
-                                subScript: true
-                            })
-                        ];
-                    } else {
-                        part1 = [
-                            new TextRun({
-                                text: " + ",
-                            }),
-                            new TextRun({
-                                text: "S'",
-                            }),
-                            new TextRun({
-                                text: "x" + (i+1),
-                                subScript: true
-                            }),                        
-                        ];
-                    }                    
-                    result = result.concat(part1);
+                var result;
+                if (st.report_data.cut_chars.cut_u.length > 0) {
+                    result = [
+                        new TextRun({
+                            text: "S'",
+                        }),
+                        new TextRun({
+                            text: "x",
+                            subScript: true
+                        }),
+                        new TextRun({
+                            text: " = ",
+                        })
+                    ];
+                    var part1 = [];
+                    var part2 = [];
+                    for (var i = 0; i < st.report_data.cut_chars.cut_u.length; i++) {
+                        if (i === 0) {
+                            part1 = [
+                                new TextRun({
+                                    text: "S'",
+                                }),
+                                new TextRun({
+                                    text: "x" + (i+1),
+                                    subScript: true
+                                })
+                            ];
+                        } else {
+                            part1 = [
+                                new TextRun({
+                                    text: " + ",
+                                }),
+                                new TextRun({
+                                    text: "S'",
+                                }),
+                                new TextRun({
+                                    text: "x" + (i+1),
+                                    subScript: true
+                                }),                        
+                            ];
+                        }                    
+                        result = result.concat(part1);
+                    }
+                    for (var i = 0; i < st.report_data.cut_chars.cut_u.length; i++) {
+                        if (i === 0) {
+                            part2 = [
+                                new TextRun({
+                                    text: " = ",
+                                }),
+                                new TextRun({
+                                    text: st.report_data.cut_chars.cut_sx[i],
+                                }),                            
+                            ];
+                        } else {
+                            part2 = [
+                                new TextRun({
+                                    text: " + ",
+                                }),
+                                new TextRun({
+                                    text: st.report_data.cut_chars.cut_sx[i],
+                                }),                            
+                            ];
+                        }                    
+                        result = result.concat(part2);
+                    }
+                    var part3 = [
+                        new TextRun({
+                            text: " = " + st.report_data.cut_off_sx + " мм",
+                        }),
+                        sup_2,
+                        new TextRun({
+                            text: ",",
+                        }),
+                    ];
+                    result = result.concat(part3);
+                } else {
+                    result = [
+                        new TextRun({
+                            text: "S'",
+                        }),
+                        new TextRun({
+                            text: "x",
+                            subScript: true
+                        }),
+                        new TextRun({
+                            text: " = 0 мм",
+                        }),
+                        sup_2,
+                        new TextRun({
+                            text: ",",
+                        }),
+                    ];
                 }
-                for (var i = 0; i < st.report_data.cut_chars.cut_u.length; i++) {
-                    if (i === 0) {
-                        part2 = [
-                            new TextRun({
-                                text: " = ",
-                            }),
-                            new TextRun({
-                                text: st.report_data.cut_chars.cut_sx[i],
-                            }),                            
-                        ];
-                    } else {
-                        part2 = [
-                            new TextRun({
-                                text: " + ",
-                            }),
-                            new TextRun({
-                                text: st.report_data.cut_chars.cut_sx[i],
-                            }),                            
-                        ];
-                    }                    
-                    result = result.concat(part2);
-                }
-                var part3 = [
-                    new TextRun({
-                        text: " = " + st.report_data.cut_off_sx + " мм",
-                    }),
-                    sup_2,
-                    new TextRun({
-                        text: ",",
-                    }),
-                ];
-                result = result.concat(part3);
                 return result;
             }
 
             function sy_tot_phrase() {
-                var result = [
-                    new TextRun({
-                        text: "S'",
-                    }),
-                    new TextRun({
-                        text: "y",
-                        subScript: true
-                    }),
-                    new TextRun({
-                        text: " = ",
-                    })
-                ];
-                var part1 = [];
-                var part2 = [];
-                for (var i = 0; i < st.report_data.cut_chars.cut_u.length; i++) {
-                    if (i === 0) {
-                        part1 = [
-                            new TextRun({
-                                text: "S'",
-                            }),
-                            new TextRun({
-                                text: "y" + (i+1),
-                                subScript: true
-                            })
-                        ];
-                    } else {
-                        part1 = [
-                            new TextRun({
-                                text: " + ",
-                            }),
-                            new TextRun({
-                                text: "S'",
-                            }),
-                            new TextRun({
-                                text: "y" + (i+1),
-                                subScript: true
-                            }),                        
-                        ];
-                    }                    
-                    result = result.concat(part1);
+                var result;
+                if (st.report_data.cut_chars.cut_u.length > 0) {
+                    result = [
+                        new TextRun({
+                            text: "S'",
+                        }),
+                        new TextRun({
+                            text: "y",
+                            subScript: true
+                        }),
+                        new TextRun({
+                            text: " = ",
+                        })
+                    ];
+                    var part1 = [];
+                    var part2 = [];
+                    for (var i = 0; i < st.report_data.cut_chars.cut_u.length; i++) {
+                        if (i === 0) {
+                            part1 = [
+                                new TextRun({
+                                    text: "S'",
+                                }),
+                                new TextRun({
+                                    text: "y" + (i+1),
+                                    subScript: true
+                                })
+                            ];
+                        } else {
+                            part1 = [
+                                new TextRun({
+                                    text: " + ",
+                                }),
+                                new TextRun({
+                                    text: "S'",
+                                }),
+                                new TextRun({
+                                    text: "y" + (i+1),
+                                    subScript: true
+                                }),                        
+                            ];
+                        }                    
+                        result = result.concat(part1);
+                    }
+                    for (var i = 0; i < st.report_data.cut_chars.cut_u.length; i++) {
+                        if (i === 0) {
+                            part2 = [
+                                new TextRun({
+                                    text: " = ",
+                                }),
+                                new TextRun({
+                                    text: st.report_data.cut_chars.cut_sy[i],
+                                }),                            
+                            ];
+                        } else {
+                            part2 = [
+                                new TextRun({
+                                    text: " + ",
+                                }),
+                                new TextRun({
+                                    text: st.report_data.cut_chars.cut_sy[i],
+                                }),                            
+                            ];
+                        }                    
+                        result = result.concat(part2);
+                    }
+                    var part3 = [
+                        new TextRun({
+                            text: " = " + st.report_data.cut_off_sy + " мм",
+                        }),
+                        sup_2,
+                        new TextRun({
+                            text: ",",
+                        }),
+                    ];
+                    result = result.concat(part3);
+                } else {
+                    result = [
+                        new TextRun({
+                            text: "S'",
+                        }),
+                        new TextRun({
+                            text: "y",
+                            subScript: true
+                        }),
+                        new TextRun({
+                            text: " = 0 мм",
+                        }),
+                        sup_2,
+                        new TextRun({
+                            text: ",",
+                        }),
+                    ];
                 }
-                for (var i = 0; i < st.report_data.cut_chars.cut_u.length; i++) {
-                    if (i === 0) {
-                        part2 = [
-                            new TextRun({
-                                text: " = ",
-                            }),
-                            new TextRun({
-                                text: st.report_data.cut_chars.cut_sy[i],
-                            }),                            
-                        ];
-                    } else {
-                        part2 = [
-                            new TextRun({
-                                text: " + ",
-                            }),
-                            new TextRun({
-                                text: st.report_data.cut_chars.cut_sy[i],
-                            }),                            
-                        ];
-                    }                    
-                    result = result.concat(part2);
-                }
-                var part3 = [
-                    new TextRun({
-                        text: " = " + st.report_data.cut_off_sy + " мм",
-                    }),
-                    sup_2,
-                    new TextRun({
-                        text: ",",
-                    }),
-                ];
-                result = result.concat(part3);
                 return result;
-            }
-
-
-
+            }            
             return result;
-        }
+        }  // конец report_5
 
         const report_6a = function () {                                                           //пояснение про Lux и Luy
             var result = [];

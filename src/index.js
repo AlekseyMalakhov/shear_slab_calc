@@ -8699,10 +8699,11 @@ function OpeningIsNearData(props) {                             //отверст
     const openings_html = [""];                                             //каждый раз при ререндере мы создаем отверстия заново из эррея номеров отверстий и объекта содержащего характеристики отверстий
     var nbr = 1;                                                                //номер отверстия для отображения
     for (let i = 1; i < openings_number.length; i++) {
+        console.log(nbr);
         if (openings_number[i] !== "removed") {                             //удаленные отверстия не создаем
             var new_opening =  
                 <fieldset id={"opening_" + i} key = {i + "opn"} className="border p-3 mb-3">
-                    <button type="button" className="close" aria-label="Close" onClick = {removeOpeningNumber}>
+                    <button type="button" className={(nbr === 1) ? "close invisible" : "close"} aria-label="Close" onClick = {removeOpeningNumber}>
                         <span id={"op_close_" + i} aria-hidden="true">&times;</span>
                     </button>
                     <h5>Отверстие {nbr}</h5>

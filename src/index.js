@@ -7685,8 +7685,14 @@ function Header(props) {
 }
 
 function Help(props) {
+
+    function emulateClick() {
+        console.log("click");
+        document.getElementById("help").click();
+    }
+
     return (
-        <div className = "collapse" id="help_par">
+        <div className = "collapse border mb-4" id="help_par">
             <div className="col">
                 <p>Всем привет!</p>
                 <p>Цель этой программы быстро и удобно рассчитать плиту на продавливание. Для простоты использования и чтобы не морочить людям голову программа имеет пару допущений:
@@ -7721,10 +7727,16 @@ function Help(props) {
                             <img src="./pic/workaround_1.png" className="card-img-bottom" alt="обход ограничения"></img>
                         </div>                           
                     </div>
-                <p>Для любителей покапаться в коде вот <a href="https://github.com/AlekseyMalakhov/shear_slab_calc">ссылка на GitHub</a> - милости просим.</p>
-                <p>Обсуждение программы на dwg.ru <a href="https://github.com/AlekseyMalakhov/shear_slab_calc">здесь.</a></p>
-                <p>Приятного пользования! TermenVox. 2020г. <a href="mailto:hexel@tut.by">hexel@tut.by</a></p>
-                
+                <Row>
+                    <div className="col-9 text-left">
+                        <p>Для любителей покапаться в коде вот <a href="https://github.com/AlekseyMalakhov/shear_slab_calc">ссылка на GitHub</a> - милости просим.</p>
+                        <p>Обсуждение программы на dwg.ru <a href="https://github.com/AlekseyMalakhov/shear_slab_calc">здесь.</a></p>
+                        <p>Приятного пользования! TermenVox. 2020г. <a href="mailto:hexel@tut.by">hexel@tut.by</a></p>
+                    </div>
+                    <div className="col my-auto">
+                        <Button variant="primary" onClick = {emulateClick}>Закрыть справку</Button>
+                    </div>                 
+                </Row>                    
             </div>
         </div>
     );
@@ -8699,7 +8711,6 @@ function OpeningIsNearData(props) {                             //отверст
     const openings_html = [""];                                             //каждый раз при ререндере мы создаем отверстия заново из эррея номеров отверстий и объекта содержащего характеристики отверстий
     var nbr = 1;                                                                //номер отверстия для отображения
     for (let i = 1; i < openings_number.length; i++) {
-        console.log(nbr);
         if (openings_number[i] !== "removed") {                             //удаленные отверстия не создаем
             var new_opening =  
                 <fieldset id={"opening_" + i} key = {i + "opn"} className="border p-3 mb-3">

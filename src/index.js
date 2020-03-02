@@ -79,6 +79,13 @@ var unitFactor = {                      //коэффициенты перево�
 function checkDataAdequacy(state) {                             // проверяем достаточность исходных данных. Если каких то данных нет - добавляем их в результат
     var result = [];
     var id;
+    var names = {
+        input_n_load: "сила N",
+        input_t_slab_size: "толщина плиты",
+        input_a_slab_size: "привязка арматуры плиты",
+        a_column_size: "размер колонны вдоль X",
+        b_column_size: "размер колонны вдоль Y",
+    };
 	for (id in state) {
         if (!state[id] && (id !== "shear_reinforcement")        // тут мы проверяем незаполненные поля, кроме исключений, таких как shear_reinforcement, asw_tot и необязательных, таких как mx_load
                         && (id !== "slab_edge")
@@ -111,18 +118,27 @@ function checkDataAdequacy(state) {                             // провер�
                         && (id !== "in_out_asw_show")
                         && (id !== "op_tangents_show")
                         && (id !== "merged_angls")
+                        && (id !== "n_load")
+                        && (id !== "t_slab_size")
+                        && (id !== "a_slab_size")
                          ) {
-                            result.push(id);                //если в state есть незаполненная графа - добавляем её в результат
+                            result.push(names[id]);                //если в state есть незаполненная графа - добавляем её в результат
         }
     }
+    if (state.a_column_size === 1) {
+        result.push(names.a_column_size);
+    }
+    if (state.b_column_size === 1) {
+        result.push(names.b_column_size);
+    }
     if (state.shear_reinforcement && ((state.shear_bars_number.X.length - 1) !== state.shear_bars_row_number)) {    //если мы считаем поперечку и не заполнены все столбцы Х, то ошибка
-        result.push("shear_bars_number.X");
+        result.push("количество стержней вдоль X");
     }
     if (state.shear_reinforcement && ((state.shear_bars_number.Y.length - 1) !== state.shear_bars_row_number)) {        //если мы считаем поперечку и не заполнены все столбцы Y, то ошибка
-        result.push("shear_bars_number.Y");
+        result.push("количество стержней вдоль Y");
     }
     if (state.shear_reinforcement && ((state.input_shear_bars_spacing_to_prev.length - 1) !== state.shear_bars_row_number)) {     //если мы считаем поперечку и не заполнены все расстояния до предыдцщего, то ошибка
-        result.push("input_shear_bars_spacing_to_prev");
+        result.push("привязка ряда поперечной арматуры к предыдущему ряду");
     }
     if (state.shear_reinforcement && (state.aswCircles.length === 0) && (state.circlesX.length > 0)) {     //если у нас есть стержни, но они не попадают в расчетный контур
         result.push("Ни один из стержней армирования не попадает в расчетную зону");
@@ -7642,7 +7658,8 @@ class App extends React.Component {                 // это наш главн�
                             </div>
                         </div>
                     </div>                    
-                </Row> ;       
+                </Row>
+                <div className = "footer py-2" variant={this.state.result_color}>{this.state.text_result}</div>    
             </Container>            
         );
             

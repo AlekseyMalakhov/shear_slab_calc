@@ -135,6 +135,7 @@ function checkDataAdequacy(state) {                             // провер�
     if (state.b_column_size === 1) {
         result.push(names.b_column_size);
     }
+    /*
     if (state.shear_reinforcement && ((state.shear_bars_number.X.length - 1) !== state.shear_bars_row_number)) {    //если мы считаем поперечку и не заполнены все столбцы Х, то ошибка
         result.push("количество стержней вдоль X");
     }
@@ -146,6 +147,15 @@ function checkDataAdequacy(state) {                             // провер�
     }
     if (state.shear_reinforcement && (state.aswCircles.length === 0) && (state.circlesX.length > 0)) {     //если у нас есть стержни, но они не попадают в расчетный контур
         result.push("Ни один из стержней армирования не попадает в расчетную зону");
+    }
+    */
+    if (
+        (state.shear_reinforcement && ((state.shear_bars_number.X.length - 1) !== state.shear_bars_row_number)) ||
+        (state.shear_reinforcement && ((state.shear_bars_number.Y.length - 1) !== state.shear_bars_row_number)) ||
+        (state.shear_reinforcement && ((state.input_shear_bars_spacing_to_prev.length - 1) !== state.shear_bars_row_number)) || 
+        (state.shear_reinforcement && (state.aswCircles.length === 0) && (state.circlesX.length > 0))
+        ) {    //если мы считаем поперечку и не заполнены все столбцы то ошибка
+        result.push("характеристики армирования");
     }
     return result;
 }
@@ -7500,7 +7510,6 @@ class App extends React.Component {                 // это наш главн�
     }
 
     render() {
-        console.log(window.innerHeight);
         /*
         console.log(this.state);
         */

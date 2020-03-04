@@ -97,6 +97,10 @@ i {
     color: grey;
 }
 
+#help_m:hover {
+    color: grey;
+}
+
 .like_row {
     display: flex;
     flex-wrap: wrap;
@@ -111,4 +115,8 @@ i {
     width: 100%;
     background-color: #adb5bd;
     font-weight: bold;
+}
+
+.displ_none {
+    display: none;
 }

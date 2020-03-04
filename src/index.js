@@ -12,6 +12,8 @@ import ToggleButton from 'react-bootstrap/ToggleButton'
 import Canvg from 'canvg';
 import { saveAs } from 'file-saver';
 import { Document, Packer, Paragraph, TextRun, Media, AlignmentType } from "docx";
+import Popover from 'react-bootstrap/Popover';
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 
 // всякие второстепенные исходные данные
 
@@ -73,6 +75,8 @@ var unitFactor = {                      //коэффициенты перево�
                     м: 1000
                 }
 }
+
+var footer_appear = 840;            //высота экрана при которой появляется футер
 
 //всякие вспомогательные функции
 
@@ -7453,7 +7457,7 @@ class App extends React.Component {                 // это наш главн�
                     this.setState({svg_size: svg_size,
                                     v_width: width});
                 }
-                if (window.innerHeight <= 830 && window.innerHeight > 670) {
+                if (window.innerHeight <= 830 && window.innerHeight > 680) {
                     if (width >= 1300) {
                         svg_size = 400;
                     } else if (width >= 1150 && width <= 1299) {
@@ -7470,7 +7474,7 @@ class App extends React.Component {                 // это наш главн�
                     this.setState({svg_size: svg_size,
                         v_width: width});
                 }
-                if (window.innerHeight <= 670) {
+                if (window.innerHeight <= 680) {
                     position_fixed = false;
                     this.setState({svg_position_fixed: position_fixed},
                         function() {
@@ -7657,14 +7661,18 @@ class App extends React.Component {                 // это наш главн�
                                     <ViewSettings 
                                         onViewSettingstChange = {this.getData} globalState = {this.state}/>
                                     <Result globalState = {this.state}/>                        
-                                    <Button variant="primary" className = {(this.state.result_color !== "secondary") ? "" : "invisible"} onClick = {this.exportToWord}>Сохранить как MS Word</Button>
+                                    <Button variant="primary" 
+                                        className = {((this.state.result_color !== "secondary") ? "" : "invisible") + 
+                                            (((window.innerHeight > footer_appear) || (this.state.v_width <=768) ) ? "" : " mt-3")} 
+                                        onClick = {this.exportToWord}>Сохранить как MS Word
+                                    </Button>
                                     <canvas id="buffer" width="0" height="0" style = {{display: "none"}}></canvas>
                                 </div>
                             </div>
                         </div>                    
                     </Row>
                 </Container>
-                <div className = {((window.innerHeight > 830) || (this.state.v_width <=768) ) ? "invisible" : ""}>
+                <div className = {((window.innerHeight > footer_appear) || (this.state.v_width <=768) ) ? "invisible" : ""}>
                     <div className = {"alert-" + this.state.result_color + " footer p-2"}>
                         {this.state.text_result}
                     </div>                 
@@ -7728,6 +7736,7 @@ function Help(props) {
                     большинство проектировщиков понятия не имеют куда там у них действует момент, все моменты всегда нагружают сечение. 
                     Взяли из схемы максимальные Мх, Му, разделили пополам, вбили их с любыми знаками и забыли.</p>
                 <p>2) Никаких "разгружающих" продольных усилий, по вышеназванным причинам. Продольное усилие всегда нагружает сечение независимо от знака. </p>
+                <p>Моменты Мх и Му это моменты <b>вдоль</b> осей Х и Y, а не относительно. Почему? Потому что такой подход принят в СП.</p>
                 <p>Также данная версия программы имеет <b>одно ограничение</b>: если у Вас, несколько отверстий сливаются в одно и суммарный выбиваемый угол превышает 180 градусов, программа 
                     посчитает его неправильно. На данный момент я не придумал простого и надежного алгоритма как научить программу отличать углы больше 180 градусов от им обратным (например если у Вас 
                     наложенные отверстия выбьют угол 210 градусов, программа посчитает что выбитый угол равен 360-210 = 150 градусов.</p>
@@ -7834,6 +7843,7 @@ class Loads extends React.Component {
     constructor(props) {
         super(props);
         this.handleInput = this.handleInput.bind(this);
+        this.help = this.help.bind(this);
     }
 
     handleInput(e) {
@@ -7843,10 +7853,25 @@ class Loads extends React.Component {
         this.props.onLoadChange(state);
     }
 
-    render() {
+    help() {
+        return (
+            <OverlayTrigger trigger="click" rootClose = {true} placement="right" overlay={
+                <Popover id="popover-basic">
+                <Popover.Title as="h3">Направление моментов</Popover.Title>
+                <Popover.Content>
+                    Моменты Мх и Му это моменты <b>вдоль</b> осей Х и Y, а не относительно. Почему? Потому что такой подход принят в СП.
+                </Popover.Content>
+            </Popover>
+            }>
+                <i id = "help_m" className="far fa-question-circle"></i>
+            </OverlayTrigger>
+        );
+    }
+
+    render() {        
         return (
             <form>
-                <h5>Нагрузки</h5>
+                <h5>Нагрузки {this.help()}</h5>
                 <div className="form-group">
                     <label htmlFor = "input_n_load">Продольная сила N, {this.props.globalState.force_units}:</label>
                     <input type="number" step="0.0001" className="form-control" min="0" id="input_n_load" onChange={this.handleInput}></input>
@@ -8778,7 +8803,7 @@ function OpeningIsNearData(props) {                             //отверст
 class Result extends React.Component {                      // строка с результатом
     render() {
         return (
-            <div className = {((window.innerHeight > 830) || (this.props.globalState.v_width <=768) ) ? "result_block" : "invisible"} >
+            <div className = {((window.innerHeight > footer_appear) || (this.props.globalState.v_width <=768) ) ? "result_block" : "displ_none"} >
                 <h5>Результат</h5>
                 <Alert className = "result_alert" variant={this.props.globalState.result_color}>
                     {this.props.globalState.text_result}

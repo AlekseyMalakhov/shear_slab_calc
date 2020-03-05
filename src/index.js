@@ -7774,7 +7774,7 @@ function Help(props) {
                 <Row>
                     <div className="col-9 text-left">
                         <p>Для любителей покапаться в коде вот <a href="https://github.com/AlekseyMalakhov/shear_slab_calc">ссылка на GitHub</a> - милости просим.</p>
-                        <p>Обсуждение программы на dwg.ru <a href="https://github.com/AlekseyMalakhov/shear_slab_calc">здесь.</a></p>
+                        <p>Обсуждение программы на dwg.ru <a href="https://forum.dwg.ru/showthread.php?p=1859398#post1859398">здесь.</a></p>
                         <p>Приятного пользования! TermenVox. 2020г. <a href="mailto:hexel@tut.by">hexel@tut.by</a></p>
                     </div>
                     <div className="col my-auto">

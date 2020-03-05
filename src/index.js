@@ -7756,19 +7756,19 @@ function Help(props) {
                             <div className="card-body">
                                 <h5 className="card-title">Работает</h5>
                             </div>
-                            <img src="./pic/good_3.png" className="card-img-bottom" alt="хорошо"></img>
+                            <img src="static/pic/good_3.png" className="card-img-bottom" alt="хорошо"></img>
                         </div>
                         <div className="card text-center" style={{maxWidth: 450}}>
                             <div className="card-body">
                                 <h5 className="card-title">Не работает:(Пичалька</h5>
                             </div>
-                            <img src="./pic/bad_3.png" className="card-img-bottom" alt="плохо"></img>
+                            <img src="static/pic/bad_3.png" className="card-img-bottom" alt="плохо"></img>
                         </div>
                         <div className="card text-center" style={{maxWidth: 450}}>
                             <div className="card-body">
                                 <h5 className="card-title">Обход ограничения</h5>
                             </div>
-                            <img src="./pic/workaround_1.png" className="card-img-bottom" alt="обход ограничения"></img>
+                            <img src="static/pic/workaround_1.png" className="card-img-bottom" alt="обход ограничения"></img>
                         </div>                           
                     </div>
                 <Row>

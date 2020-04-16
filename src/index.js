@@ -3431,7 +3431,7 @@ class App extends React.Component {                 // это наш главн�
             var part6 = [];
             if (st.openingIsNear) {
                 part6 = [
-                    new Paragraph({                                          //x'c = s'x/u;
+                    new Paragraph({                                          //x'c = -s'x/u;
                         children: [
                             new TextRun({
                                 text: "x'",
@@ -3444,7 +3444,7 @@ class App extends React.Component {                 // это наш главн�
                                 text: " = ",
                             }),
                             new TextRun({
-                                text: "S'",
+                                text: "-S'",
                             }),
                             new TextRun({
                                 text: "x",
@@ -3456,7 +3456,7 @@ class App extends React.Component {                 // это наш главн�
                         ],
                         style: "Norm1"
                     }),
-                    new Paragraph({                                          //y'c = s'y/u;
+                    new Paragraph({                                          //y'c = -s'y/u;
                         children: [
                             new TextRun({
                                 text: "y'",
@@ -3469,7 +3469,7 @@ class App extends React.Component {                 // это наш главн�
                                 text: " = ",
                             }),
                             new TextRun({
-                                text: "S'",
+                                text: "-S'",
                             }),
                             new TextRun({
                                 text: "y",

@@ -715,6 +715,9 @@ function findDirection(p1, p2) {                    //найти направл�
     if ((p1[0] !== p2[0]) && (p1[1] === p2[1])) {
         result = "horiz";
     }
+    if ((p1[0] === p2[0]) && (p1[1] === p2[1])) {       // если ширина вырубки = 0, например касательная попала точно на угол u
+        result = "NO_REZ";
+    }
     return result;
 }
 
@@ -734,6 +737,7 @@ function calculateCutOff(int_point_1, int_point_2) {            //считаем
     var dir;                                            //направление линии вырубки (вертикальное/горизонтальное)
 
     cut_off = distanceTwoPoints(int_point_1, int_point_2);          // посчитали длину вырубки
+    console.log("cut_off = " + cut_off);
     result.cut_u = cut_off;
 
     cut_mid= findCenter(int_point_1, int_point_2);          // координата центра вырубки
@@ -752,6 +756,13 @@ function calculateCutOff(int_point_1, int_point_2) {            //считаем
         result.cut_ibx = ibx_cut;
         iby_cut = cut_off * Math.pow(cut_mid[1], 2);
         iby_cut = Math.floor(iby_cut);
+        result.cut_iby = iby_cut;
+    }
+    if (dir === "NO_REZ") {
+        //если ширина вырубки = 0, например касательная попала точно на угол u             
+        ibx_cut = 0;
+        result.cut_ibx = ibx_cut;
+        iby_cut = 0;
         result.cut_iby = iby_cut;
     }
     sx_cut = cut_off * cut_mid[0];
@@ -902,6 +913,7 @@ function addCornersU(coords, uRealCoords, merged_angls) {         //провер
         //2) ВСЕ, КООРДИНАТЫ ТРЕУГОЛЬНИКА ЕСТЬ, ТЕПЕРЬ БЕРЕМ ПО ОЧЕРЕДИ ВСЕ УГЛЫ u И ПРОВЕРЯЕМ, ПОПАДАЮТ ЛИ ОНИ В ТРЕУГОЛЬНИК
 
         var corner_list = createCornerList(u_corners, triangles);       //делаем список выбитых углов для каждого отверстия
+        //console.log(corner_list);
 
         // СЧИТАЕМ ВЫРУБКИ: ЕСЛИ ОТВЕРСТИЕ НЕ ИМЕЕТ УГЛОВ ВНУТРИ, ЗНАЧИТ ОНО СЧИТАЕТСЯ ПРЯМОЙ ВЫРУБКОЙ
 
@@ -1910,6 +1922,7 @@ class App extends React.Component {                 // это наш главн�
             cut_chars = addCornersU(coords_intersect, st.uRealCoords, merged_angls);
 
             //считаем сумму вырубок u, iby, ibx
+            console.log("cut_chars.cut_u = " + cut_chars.cut_u);
             for (var i = 0; i < cut_chars.cut_u.length; i++) {
                 cut_off = cut_off + cut_chars.cut_u[i];
                 cut_off_ibx = cut_off_ibx + cut_chars.cut_ibx[i];
@@ -7510,9 +7523,7 @@ class App extends React.Component {                 // это наш главн�
     }
 
     render() {
-        /*
-        console.log(this.state);
-        */
+        console.log(this.state);        
         /*
         var row;
         if ((window.innerHeight > 830) || (this.state.v_width <=768) ) {         // стандартная версия для высоких экранов или мобильных браузеров

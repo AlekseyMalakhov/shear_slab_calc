@@ -660,24 +660,37 @@ function findUIntersectPoints(angles, uRealCoords) {        //находим р�
             y = findAngleCoords(angles[i][k], 10000)[1];
             line_coords = [0, 0, x, y];          // находим координаты второй точки касательной например на расстоянии 10000 мм [x1, y1, x2, y2]
 
-            inters_0 = findIntersect(u_lines[0], line_coords);               // пытаемся найти пересечение касательной со сторонами u
+            // пытаемся найти пересечение касательной со сторонами u
+            // касательная, может пересечься только с 1 линией u. Если она пересекается с двумя линиями u, значит она проходит через угол u.
+            // в таком случае мы берем пересечение только с 1 стороной u.
+            inters_0 = findIntersect(u_lines[0], line_coords);             
             if (inters_0) {
                 intersection[i].push(inters_0);
+                //console.log("отверстие " + i + ", касательная " + k + ", пересеклась с линией u 0");
+                // если мы находим пересечение с одной стороной, мы выскакиваем из этой итерации данного лупа, чтобы
+                // не получить второе совпадение, если у нас касательная проходит через угол u, т.е. пересекается с двумя сторонами u.
+                continue;
             }
 
             inters_1 = findIntersect(u_lines[1], line_coords);
             if (inters_1) {
                 intersection[i].push(inters_1);
+                //console.log("отверстие " + i + ", касательная " + k + ", пересеклась с линией u 1");
+                continue;
             }
 
             inters_2 = findIntersect(u_lines[2], line_coords);
             if (inters_2) {
                 intersection[i].push(inters_2);
+                //console.log("отверстие " + i + ", касательная " + k + ", пересеклась с линией u 2");
+                continue;
             }
 
             inters_3 = findIntersect(u_lines[3], line_coords);
             if (inters_3) {
                 intersection[i].push(inters_3);
+                //console.log("отверстие " + i + ", касательная " + k + ", пересеклась с линией u 3");
+                continue;
             }
         }
    }
@@ -3652,7 +3665,7 @@ class App extends React.Component {                 // это наш главн�
                         new Paragraph({            //
                             children: [
                                 new TextRun({
-                                    text: "Координаты центра u'",
+                                    text: "Координаты центра линии u'",
                                 }),
                                 new TextRun({
                                     text: (i+1),
@@ -3688,6 +3701,11 @@ class App extends React.Component {                 // это наш главн�
 
             function ibx_phrase(i) {
                 var db = st.report_data.cut_chars;
+                //отрицательное число берем в скобочки
+                var cut_midX = db.cut_midX[i];
+                if (db.cut_midX[i] < 0 ) {
+                    cut_midX = "(" + db.cut_midX[i] + ")";
+                }
                 var result = [
                     new TextRun({
                         text: "I'",
@@ -3709,7 +3727,7 @@ class App extends React.Component {                 // это наш главн�
                         }),
                         sup_3,
                         new TextRun({
-                            text: "/12 + " + db.cut_u[i] + " * " + db.cut_midX[i],
+                            text: "/12 + " + db.cut_u[i] + " * " + cut_midX,
                         }),
                         sup_2,
                         new TextRun({
@@ -3725,7 +3743,7 @@ class App extends React.Component {                 // это наш главн�
                 if (db.dir[i] === "vert") {
                     part1 = [
                         new TextRun({
-                            text: db.cut_u[i] + " * " + db.cut_midX[i],
+                            text: db.cut_u[i] + " * " + cut_midX,
                         }),
                         sup_2,
                         new TextRun({
@@ -3745,6 +3763,11 @@ class App extends React.Component {                 // это наш главн�
 
             function iby_phrase(i) {
                 var db = st.report_data.cut_chars;
+                //отрицательное число берем в скобочки
+                var cut_midY = db.cut_midY[i];
+                if (db.cut_midY[i] < 0 ) {
+                    cut_midY = "(" + db.cut_midY[i] + ")";
+                }
                 var result = [
                     new TextRun({
                         text: "I'",
@@ -3766,7 +3789,7 @@ class App extends React.Component {                 // это наш главн�
                         }),
                         sup_3,
                         new TextRun({
-                            text: "/12 + " + db.cut_u[i] + " * " + db.cut_midY[i],
+                            text: "/12 + " + db.cut_u[i] + " * " + cut_midY,
                         }),
                         sup_2,
                         new TextRun({
@@ -3782,7 +3805,7 @@ class App extends React.Component {                 // это наш главн�
                 if (db.dir[i] === "horiz") {
                     part1 = [
                         new TextRun({
-                            text: db.cut_u[i] + " * " + db.cut_midY[i],
+                            text: db.cut_u[i] + " * " + cut_midY,
                         }),
                         sup_2,
                         new TextRun({
@@ -3802,6 +3825,11 @@ class App extends React.Component {                 // это наш главн�
 
             function sx_phrase(i) {
                 var db = st.report_data.cut_chars;
+                //отрицательное число берем в скобочки
+                var cut_midX = db.cut_midX[i];
+                if (db.cut_midX[i] < 0 ) {
+                    cut_midX = "(" + db.cut_midX[i] + ")";
+                }
                 var result = [
                     new TextRun({
                         text: "S'",
@@ -3811,7 +3839,7 @@ class App extends React.Component {                 // это наш главн�
                         subScript: true
                     }),
                     new TextRun({
-                        text: " = " + db.cut_u[i] + " * " + db.cut_midX[i] + " = " + db.cut_sx[i] + " мм",
+                        text: " = " + db.cut_u[i] + " * " + cut_midX + " = " + db.cut_sx[i] + " мм",
                     }),
                     sup_2,
                     new TextRun({
@@ -3823,6 +3851,11 @@ class App extends React.Component {                 // это наш главн�
 
             function sy_phrase(i) {
                 var db = st.report_data.cut_chars;
+                //отрицательное число берем в скобочки
+                var cut_midY = db.cut_midY[i];
+                if (db.cut_midY[i] < 0 ) {
+                    cut_midY = "(" + db.cut_midY[i] + ")";
+                }
                 var result = [
                     new TextRun({
                         text: "S'",
@@ -3832,7 +3865,7 @@ class App extends React.Component {                 // это наш главн�
                         subScript: true
                     }),
                     new TextRun({
-                        text: " = " + db.cut_u[i] + " * " + db.cut_midY[i] + " = " + db.cut_sy[i] + " мм",
+                        text: " = " + db.cut_u[i] + " * " + cut_midY + " = " + db.cut_sy[i] + " мм",
                     }),
                     sup_2,
                     new TextRun({
@@ -4081,23 +4114,22 @@ class App extends React.Component {                 // это наш главн�
                         result = result.concat(part1);
                     }
                     for (var i = 0; i < st.report_data.cut_chars.cut_u.length; i++) {
+                        //отрицательное число берем в скобочки
+                        var cut_sx = st.report_data.cut_chars.cut_sx[i];
+                        if (cut_sx < 0 ) {
+                            cut_sx = "(" + cut_sx + ")";
+                        }
                         if (i === 0) {
                             part2 = [
                                 new TextRun({
-                                    text: " = ",
-                                }),
-                                new TextRun({
-                                    text: st.report_data.cut_chars.cut_sx[i],
-                                }),                            
+                                    text: " = " + cut_sx,
+                                }),                           
                             ];
                         } else {
                             part2 = [
                                 new TextRun({
-                                    text: " + ",
-                                }),
-                                new TextRun({
-                                    text: st.report_data.cut_chars.cut_sx[i],
-                                }),                            
+                                    text: " + " + cut_sx,
+                                }),                        
                             ];
                         }                    
                         result = result.concat(part2);
@@ -4178,23 +4210,22 @@ class App extends React.Component {                 // это наш главн�
                         result = result.concat(part1);
                     }
                     for (var i = 0; i < st.report_data.cut_chars.cut_u.length; i++) {
+                        //отрицательное число берем в скобочки
+                        var cut_sy = st.report_data.cut_chars.cut_sy[i];
+                        if (cut_sy < 0 ) {
+                            cut_sy = "(" + cut_sy + ")";
+                        }
                         if (i === 0) {
                             part2 = [
                                 new TextRun({
-                                    text: " = ",
-                                }),
-                                new TextRun({
-                                    text: st.report_data.cut_chars.cut_sy[i],
-                                }),                            
+                                    text: " = " + cut_sy,
+                                }),                          
                             ];
                         } else {
                             part2 = [
                                 new TextRun({
-                                    text: " + ",
-                                }),
-                                new TextRun({
-                                    text: st.report_data.cut_chars.cut_sy[i],
-                                }),                            
+                                    text: " + " + cut_sy,
+                                })                           
                             ];
                         }                    
                         result = result.concat(part2);
@@ -7729,7 +7760,7 @@ function Header(props) {
                 <span>Расчет на продавливание онлайн по СП 63.13330.2012 by TermenVox. 2020.</span>
             </div>
             <div className="col text-right my-auto"> 
-                <span>v.0.1b</span>
+                <span>v.0.12b</span>
                 <span id = "help" onClick = {fixSVG} className = "ml-3" data-toggle="collapse" data-target="#help_par">
                     <i className="far fa-question-circle"></i>
                 </span> 

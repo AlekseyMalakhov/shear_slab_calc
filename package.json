@@ -3,15 +3,16 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "bootstrap": "^4.3.1",
+    "bootstrap": "^4.5.0",
     "browserify-fs": "^1.0.0",
-    "canvg": "^3.0.2",
-    "docx": "^5.0.0-rc7",
+    "canvg": "^3.0.6",
+    "docx": "^5.0.2",
     "file-saver": "^2.0.2",
-    "react": "^16.10.1",
-    "react-bootstrap": "^1.0.0-beta.12",
-    "react-dom": "^16.10.1",
-    "react-scripts": "^3.3.0"
+    "react": "^16.13.1",
+    "react-bootstrap": "^1.0.1",
+    "react-dom": "^16.13.1",
+    "react-scripts": "^3.4.1",
+    "react-test-renderer": "^16.13.1"
   },
   "scripts": {
     "start": "react-scripts start",

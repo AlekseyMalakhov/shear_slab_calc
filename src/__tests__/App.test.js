@@ -13,5 +13,9 @@ test("App created correctly", () => {
         );
     });
 
+    var app = component.getInstance();
+
+    console.log(app.state.report_data);
+
     expect(component).toBeTruthy();
 });

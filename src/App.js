@@ -125,7 +125,9 @@ function checkDataAdequacy(state) {                             // провер�
                         && (id !== "n_load")
                         && (id !== "t_slab_size")
                         && (id !== "a_slab_size")
+                        && (id !== "v_width") 
                          ) {
+                            //console.log("id = " + id);
                             result.push(names[id]);                //если в state есть незаполненная графа - добавляем её в результат
         }
     }
@@ -157,10 +159,12 @@ function checkDataAdequacy(state) {                             // провер�
         ) {    //если мы считаем поперечку и не заполнены все столбцы то ошибка
         result.push("характеристики армирования");
     }
+    console.log(result);
     return result;
 }
 
 function createInsufficientPhrase(result) {     // компануем фразу со списком нехватающих данных. берем array с названиями незаполненных граф
+    //console.log(result);
     var phrase = "";
     result.forEach((item, index) => {               
         if (index === 0) {                      // если в эррэе только 1 элемент  - берем его и все.
@@ -1140,7 +1144,7 @@ class App extends React.Component {                 // это наш главн�
             b_column_size: 0,
             input_a_column_size: 1,
             input_b_column_size: 1,
-            concrete_grade: "b15",
+            concrete_grade: "b10",
             shear_bars_grade: "a240c",
             shear_bars_diameter: "6",
             shear_bars_row_number: 2,

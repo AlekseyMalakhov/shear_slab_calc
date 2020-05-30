@@ -177,7 +177,7 @@ test("Колонна на углу плиты без армирования", ()
   expect(app.state.report_data).toMatchSnapshot();
 });
 
-test.only("Колонна на углу плиты c армированием", () => {
+test("Колонна с отверстиями", () => {
   let component;
   act(() => {
       component = create(
@@ -193,12 +193,46 @@ test.only("Колонна на углу плиты c армированием", 
     input_b_column_size: 200,
     input_t_slab_size: 200,
     input_a_slab_size: 30,
-    concrete_grade: "b20",
-    slab_edge: true,
-    edge_top: true,
-    edge_left: true,
-    input_edge_left_dist: 0,
-    input_edge_top_dist: 0,
+    concrete_grade: "b30",
+    openingIsNear: true,
+    input_openings: {
+      X: [0, 500, -300],
+      Y: [0, 300, -100],
+      a: [0, 400, 100],
+      b: [0, 200, 1200],
+    },
+  };
+
+  app.getData(mock_state);
+  //console.log(app.state);
+  //expect(app.state.report_data.factor).toBe(4.924);
+  expect(app.state.report_data).toMatchSnapshot();
+});
+
+test("Колонна с отверстиями и армированием", () => {
+  let component;
+  act(() => {
+      component = create(
+        <App></App>
+      );
+  });
+  var app = component.getInstance();
+  var mock_state = {
+    input_n_load: 50,
+    input_mx_load: 5,
+    input_my_load: 3,
+    input_a_column_size: 400,
+    input_b_column_size: 200,
+    input_t_slab_size: 200,
+    input_a_slab_size: 30,
+    concrete_grade: "b30",
+    openingIsNear: true,
+    input_openings: {
+      X: [0, 500, -300],
+      Y: [0, 300, -100],
+      a: [0, 400, 100],
+      b: [0, 200, 1200],
+    },
     shear_bars_diameter: "8",
     shear_bars_grade: "a240c",
     shear_bars_row_number: 2,
@@ -212,6 +246,6 @@ test.only("Колонна на углу плиты c армированием", 
 
   app.getData(mock_state);
   //console.log(app.state);
-  //expect(app.state.report_data.factor).toBe(3.649);
+  //expect(app.state.report_data.factor).toBe(2.843);
   expect(app.state.report_data).toMatchSnapshot();
 });

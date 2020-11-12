@@ -1178,15 +1178,15 @@ class App extends React.Component {                 // это наш главн�
             input_edge_left_dist: 10000,
             input_edge_right_dist: 10000,
             input_edge_top_dist: 10000,
-            input_edge_bottom_dist:10000,
+            input_edge_bottom_dist: 10000,
             edge_left_dist: 10000,
             edge_right_dist: 10000,
             edge_top_dist: 10000,
-            edge_bottom_dist:10000,
+            edge_bottom_dist: 10000,
             edge_left: false,
             edge_right: false,
             edge_top: false,
-            edge_bottom:false,
+            edge_bottom: false,
             circlesX: [],
             circlesY: [],
             svg_size: 500,
@@ -2401,13 +2401,18 @@ class App extends React.Component {                 // это наш главн�
             factor = Number(factor.toFixed(3));
             var result = "";
             var result_color = "";
-            if (factor <= 1) {                                                                      //формируем фразу и цвет результата
+            if ((factor <= 1) && (factor >= 0)) {                                                                      //формируем фразу и цвет результата
                 result = "Прочность обеспечена. Коэффициент использования = " + factor;
                 result_color = "success";
-            } else {
+            }            
+            if (factor > 1) {
                 result = "Прочность не обеспечена. Коэффициент использования = " + factor;
                 result_color = "danger";
-            }
+            }            
+            if (factor < 0) {
+                result = "Хм... Что-то пошло не так. Коэффициент использования отрицательный = " + factor + ". Попробуйте изменить исходные данные.";
+                result_color = "secondary";
+            }            
             console.log(result);
             this.setState({ text_result: result,                                             //обновляем стейт результатом расчета
                             result_color: result_color,
@@ -7764,7 +7769,7 @@ function Header(props) {
                 <span>Расчет на продавливание онлайн по СП 63.13330.2012 by TermenVox. 2020.</span>
             </div>
             <div className="col text-right my-auto"> 
-                <span>v.0.12b</span>
+                <span>v.0.13b</span>
                 <span id = "help" onClick = {fixSVG} className = "ml-3" data-toggle="collapse" data-target="#help_par">
                     <i className="far fa-question-circle"></i>
                 </span> 

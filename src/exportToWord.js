@@ -5760,6 +5760,8 @@ export default function exportToWord(st) {
         report_21()
     );
 
+    //console.log(JSON.stringify(word_text));
+
     // и запихиваем её в Word
     doc.addSection({
         properties: {},

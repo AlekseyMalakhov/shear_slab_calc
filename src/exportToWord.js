@@ -155,6 +155,19 @@ export default function exportToWord(st) {
                         size: 26,
                     },
                 },
+                {
+                    id: "Warning",
+                    name: "Warning 1",
+                    basedOn: "Normal",
+                    next: "Normal",
+                    quickFormat: true,
+                    run: {
+                        font: "Calibri",
+                        bold: true,
+                        size: 26,
+                        highlight: "yellow",
+                    },
+                },
             ],
         },
         sections: [],
@@ -654,6 +667,12 @@ export default function exportToWord(st) {
     //Моделируем текстовку отчета для Word
 
     const report_1 = [
+        new Paragraph({
+            //Предупреждение о баге в LibreOffice
+            text: `Внимание! Если Вы пользуетесь LibreOffice, то текст файла может отображаться некорректно! Будут отсутствовать многие буквы, особенно те, рядом с которыми стоят подстрочные символы типа Rsw, Mx и тд. Это баг в LibreOffice (ссылка https://bugs.documentfoundation.org/show_bug.cgi?id=161790). Пожалуйста, используйте MS Word или любые другие просмотрщики Docx файлов, можно онлайн.`,
+            style: "Warning",
+        }),
+        text_break,
         new Paragraph({
             //"<h2>Расчет на продавливание</h2>"
             text: "Расчет на продавливание",

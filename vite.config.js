@@ -10,4 +10,8 @@ export default defineConfig({
         globals: true,
         setupFiles: "./tests/setup.js",
     },
+    build: {
+        outDir: "./server/dist",
+        emptyOutDir: true,
+    },
 });
